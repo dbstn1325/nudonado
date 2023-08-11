@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nudonado_db?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+      use-new-id-generator-mappings: false
+      show-sql: true
+      format_sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
