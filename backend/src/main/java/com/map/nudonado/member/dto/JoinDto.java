@@ -17,7 +17,7 @@ public class JoinDto {
     private String email;
 
     @NotEmpty
-    private String nickname;
+    private String displayName;
 
     public static Member toEntity(Member member) {
         return Member.builder()
