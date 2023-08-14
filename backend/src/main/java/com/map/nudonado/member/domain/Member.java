@@ -1,13 +1,12 @@
 package com.map.nudonado.member.domain;
 
+import com.map.nudonado.booth.domain.Booth;
 import com.map.nudonado.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +16,6 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "email", nullable = false)
@@ -34,7 +32,6 @@ public class Member extends BaseEntity {
     private SocialType socialType;
 
     @Builder
-
     public Member(String email, String displayName, String profileImageUrl, SocialType socialType) {
         this.email = email;
         this.displayName = displayName;
