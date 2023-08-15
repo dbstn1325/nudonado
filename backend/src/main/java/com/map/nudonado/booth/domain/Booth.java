@@ -35,9 +35,9 @@ public class Booth extends BaseEntity {
     
 
     @Builder
-    public Booth(Member member, Category category, Location location) {
+    public Booth(Member member, String category, Location location) {
         this.member = member;
-        this.category = category;
+        this.category = Category.from(category);
         this.location = location;
     }
 }
