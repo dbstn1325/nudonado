@@ -2,10 +2,7 @@ package com.map.nudonado.booth.domain;
 
 import com.map.nudonado.common.BaseEntity;
 import com.map.nudonado.member.domain.Member;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -14,11 +11,11 @@ import javax.persistence.*;
 @Table(name = "booths")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Booth extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,6 +32,7 @@ public class Booth extends BaseEntity {
     @Column
     @ColumnDefault("0")
     private int removeReq;
+    
 
     @Builder
     public Booth(Member member, Category category, Location location) {
