@@ -14,4 +14,6 @@ public class MemberTest {
         // given & when & then
         Assertions.assertDoesNotThrow(() -> new Member(테스트_이메일, 테스트_이름, 테스트_프로필, SocialType.GOOGLE));
     }
+
+    
 }

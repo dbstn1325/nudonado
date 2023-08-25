@@ -1,8 +1,12 @@
 package com.map.nudonado.member.dto;
 
+import com.map.nudonado.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberResponse {
 
     private Long id;
@@ -10,12 +14,16 @@ public class MemberResponse {
     private String displayName;
     private String profileImage;
 
-    private MemberResponse() {}
-
     public MemberResponse(Long id, String email, String displayName, String profileImage) {
         this.id = id;
         this.email = email;
         this.displayName = displayName;
         this.profileImage = profileImage;
     }
+
+    public MemberResponse(final Member member) {
+        this(member.getId(), member.getEmail(), member.getDisplayName(), member.getProfileImageUrl());
+    }
+
+
 }

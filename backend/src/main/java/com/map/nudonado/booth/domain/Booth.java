@@ -5,6 +5,10 @@ import com.map.nudonado.member.domain.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
+
 import javax.persistence.*;
 
 @Getter
@@ -32,12 +36,15 @@ public class Booth extends BaseEntity {
     @Column
     @ColumnDefault("0")
     private int removeReq;
-    
+
+    @Column
+    private Point point;
 
     @Builder
-    public Booth(Member member, String category, Location location) {
+    public Booth(Member member, String category, Location location, Point point) {
         this.member = member;
         this.category = Category.from(category);
         this.location = location;
+        this.point = point;
     }
 }

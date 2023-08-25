@@ -17,6 +17,6 @@ public class BoothTest {
         Member 테스트_멤버 = 테스트_멤버();
 
         // when & then
-        Assertions.assertDoesNotThrow(() -> new Booth(테스트_멤버, 테스트_카테고리, 테스트_위치));
+        Assertions.assertDoesNotThrow(() -> 테스트_부스(테스트_멤버));
     }
 }

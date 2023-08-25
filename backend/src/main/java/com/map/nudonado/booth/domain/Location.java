@@ -14,9 +14,8 @@ import javax.validation.constraints.NotNull;
 public class Location {
 
     @NotNull
-    private Double longitude;
-
-    @NotNull
     private Double latitude;
 
+    @NotNull
+    private Double longitude;
 }
