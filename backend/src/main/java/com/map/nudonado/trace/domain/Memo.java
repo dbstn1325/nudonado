@@ -1,14 +1,14 @@
 package com.map.nudonado.trace.domain;
 
-import com.map.nudonado.trace.domain.exception.TraceMemoEmptyException;
+import com.map.nudonado.trace.domain.exception.TraceMemoNullOrEmptyException;
 import com.map.nudonado.trace.domain.exception.TraceMemoTooLongException;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Getter
 @Embeddable
@@ -26,8 +26,8 @@ public class Memo {
     }
 
     private void validateLength(final String memo) {
-        if(memo.length() == 0) {
-            throw new TraceMemoEmptyException();
+        if(Objects.isNull(memo) || memo.replaceAll("\\s", "").length() == 0) {
+            throw new TraceMemoNullOrEmptyException();
         }
 
         if(memo.length() > MAX_MEMO_LENGTH) {
