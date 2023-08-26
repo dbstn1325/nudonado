@@ -41,7 +41,6 @@ public class BoothService {
         return new BoothIdResponse(boothRepository.save(booth));
     }
 
-    @Transactional
     public List<BoothDetail> findBoothsNearLocation(Double x, Double y) {
         Location northEast = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
@@ -51,7 +50,7 @@ public class BoothService {
         return convertBoothsToDTOs(booths);
     }
 
-    @Transactional
+
     public List<BoothDetail> findBoothsNearLocationByCategory(Double x, Double y, String category) {
         Location northEast = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
