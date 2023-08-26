@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest()
-@ActiveProfiles("mysql")
 class TraceServiceTest {
     @Autowired
     private TraceService traceService;

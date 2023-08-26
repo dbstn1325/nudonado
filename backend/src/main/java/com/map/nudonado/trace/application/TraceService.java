@@ -9,9 +9,12 @@ import com.map.nudonado.trace.domain.Trace;
 import com.map.nudonado.trace.domain.TraceRepository;
 import com.map.nudonado.trace.dto.request.TraceCreateRequest;
 import com.map.nudonado.trace.dto.response.TraceCreateResponse;
+import com.map.nudonado.trace.dto.response.IntegrationTrace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,6 +33,13 @@ public class TraceService {
         Trace trace = createTrace(member, booth, request);
 
         return new TraceCreateResponse(traceRepository.save(trace));
+    }
+
+    public List<IntegrationTrace> findBoothTraces(final Long memberId, final Long boothId){
+        Member member = memberRepository.getById(memberId);
+        Booth booth = boothRepository.getById(boothId);
+
+        return traceRepository.getByMemberAndBooth(member, booth);
     }
 
     private Trace createTrace(final Member member, final Booth booth, TraceCreateRequest request){

@@ -1,5 +1,6 @@
 package com.map.nudonado.trace.domain;
 
+import com.map.nudonado.trace.domain.exception.TraceMemoEmptyException;
 import com.map.nudonado.trace.domain.exception.TraceMemoTooLongException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,10 @@ public class Memo {
     }
 
     private void validateLength(final String memo) {
+        if(memo.length() == 0) {
+            throw new TraceMemoEmptyException();
+        }
+
         if(memo.length() > MAX_MEMO_LENGTH) {
             throw new TraceMemoTooLongException();
         }
