@@ -26,11 +26,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+
 	/* DB */
 //	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.h2database:h2:1.4.200'
 	runtimeOnly 'org.orbisgis:h2gis:1.5.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.9.Final'
 
 	/* Test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -43,9 +45,18 @@ dependencies {
 	/* validation */
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.9.Final'
+	/* OAuth */
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+
+processResources.dependsOn('copySecret')
+tasks.register('copySecret', Copy) {
+	from './src/main/resources/security' //복사할 파일 위치
+	include "application*.yml"  // 복사할 파일들
+	into 'src/main/resources'  // 복사될 파일 위치
 }
