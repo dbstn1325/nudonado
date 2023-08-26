@@ -2,6 +2,7 @@ package com.map.nudonado.trace.presentation;
 
 import com.map.nudonado.trace.application.TraceService;
 import com.map.nudonado.trace.dto.request.TraceCreateRequest;
+import com.map.nudonado.trace.dto.response.IntegrationTrace;
 import com.map.nudonado.trace.dto.response.TraceCreateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/traces")
 @RestController
@@ -28,5 +30,14 @@ public class TraceController {
 
     }
 
+
+    @GetMapping("/{memberId}/{boothId}")
+    public ResponseEntity<List<IntegrationTrace>> findBoothTraces(
+            @PathVariable Long memberId,
+            @PathVariable Long boothId
+    ) {
+        List<IntegrationTrace> boothTraces = traceService.findBoothTraces(memberId, boothId);
+        return ResponseEntity.ok().body(boothTraces);
+    }
 
 }
