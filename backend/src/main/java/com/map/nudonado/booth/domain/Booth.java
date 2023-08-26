@@ -2,6 +2,7 @@ package com.map.nudonado.booth.domain;
 
 import com.map.nudonado.common.BaseEntity;
 import com.map.nudonado.member.domain.Member;
+import com.map.nudonado.trace.domain.Trace;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -10,6 +11,7 @@ import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Table(name = "booths")

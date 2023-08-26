@@ -2,6 +2,7 @@ package com.map.nudonado.booth.application;
 
 import com.map.nudonado.booth.domain.*;
 import com.map.nudonado.booth.dto.request.BoothCreateRequest;
+import com.map.nudonado.booth.dto.response.BoothIdResponse;
 import com.map.nudonado.common.utils.GeometryUtil;
 import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.member.domain.MemberRepository;

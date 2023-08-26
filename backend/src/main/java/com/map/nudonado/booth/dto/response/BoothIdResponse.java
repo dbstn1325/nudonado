@@ -1,5 +1,6 @@
-package com.map.nudonado.booth.domain;
+package com.map.nudonado.booth.dto.response;
 
+import com.map.nudonado.booth.domain.Booth;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

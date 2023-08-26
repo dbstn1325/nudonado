@@ -2,10 +2,8 @@ package com.map.nudonado.booth.application;
 
 import com.map.nudonado.booth.domain.*;
 import com.map.nudonado.booth.dto.request.BoothCreateRequest;
-import com.map.nudonado.common.fixtures.BoothFixtures;
-import com.map.nudonado.member.domain.Member;
+import com.map.nudonado.booth.dto.response.BoothIdResponse;
 import com.map.nudonado.member.domain.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import java.util.List;
 
 import static com.map.nudonado.common.fixtures.BoothFixtures.*;
 import static com.map.nudonado.common.fixtures.MemberFixtures.테스트_멤버;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +31,7 @@ public class BoothServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
 
     @BeforeEach
     void setUp() {

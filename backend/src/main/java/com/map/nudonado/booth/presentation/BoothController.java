@@ -2,9 +2,8 @@ package com.map.nudonado.booth.presentation;
 
 
 import com.map.nudonado.booth.application.BoothService;
-import com.map.nudonado.booth.domain.Booth;
 import com.map.nudonado.booth.domain.BoothDetail;
-import com.map.nudonado.booth.domain.BoothIdResponse;
+import com.map.nudonado.booth.dto.response.BoothIdResponse;
 import com.map.nudonado.booth.dto.request.BoothCreateRequest;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.io.ParseException;
@@ -40,5 +39,7 @@ public class BoothController {
     public List<BoothDetail> getNearbyBooths(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam String category) {
         return boothService.findBoothsNearLocationByCategory(latitude, longitude, category);
     }
+
+
 
 }

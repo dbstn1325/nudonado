@@ -51,6 +51,8 @@ class BoothRepositoryTest {
         boothRepository.save(테스트_부스_인생네컷(member));
         boothRepository.save(테스트_부스_셀플릭스(member));
 
+
+
     }
 
 }

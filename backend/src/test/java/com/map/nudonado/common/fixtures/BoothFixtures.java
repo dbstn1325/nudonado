@@ -1,7 +1,7 @@
 package com.map.nudonado.common.fixtures;
 
 import com.map.nudonado.booth.domain.Booth;
-import com.map.nudonado.booth.domain.BoothIdResponse;
+import com.map.nudonado.booth.dto.response.BoothIdResponse;
 import com.map.nudonado.booth.domain.Category;
 import com.map.nudonado.booth.domain.Location;
 import com.map.nudonado.member.domain.Member;
