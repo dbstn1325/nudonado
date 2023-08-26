@@ -11,6 +11,7 @@ import com.map.nudonado.trace.domain.Trace;
 import com.map.nudonado.trace.domain.TraceRepository;
 import com.map.nudonado.trace.domain.exception.TraceMemoTooLongException;
 import com.map.nudonado.trace.dto.request.TraceCreateRequest;
+import com.map.nudonado.trace.dto.response.IntegrationTrace;
 import com.map.nudonado.trace.dto.response.TraceCreateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,17 +21,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static com.map.nudonado.common.fixtures.BoothFixtures.테스트_부스;
 import static com.map.nudonado.common.fixtures.MemberFixtures.테스트_멤버;
-import static com.map.nudonado.common.fixtures.TraceFixtures.테스트_길이_초과_메모;
-import static com.map.nudonado.common.fixtures.TraceFixtures.테스트_메모;
+import static com.map.nudonado.common.fixtures.TraceFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest()
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 class TraceServiceTest {
     @Autowired
     private TraceService traceService;
@@ -84,6 +86,22 @@ class TraceServiceTest {
         //when & then
         assertThatThrownBy(() -> traceService.save(member.getId(), booth.getId(), request))
                 .isInstanceOf((TraceMemoTooLongException.class));
+    }
+
+    @DisplayName("멤버 아이디와 부스 아이디를 전달하면 멤버의 부스에 등록된 흔적을 조회한다.")
+    @Test
+    void 멤버_아이디와_부스_아이디를_전달하면_멤버의_부스에_등록된_흔적을_조회한다() {
+        //given
+        Long memberId = member.getId();
+        Long boothId = booth.getId();
+        traceRepository.save(테스트_흔적(member, booth));
+
+        //when & then
+        List<IntegrationTrace> traces = traceService.findBoothTraces(memberId, boothId);
+        assertAll(
+                () -> assertThat(traces.size()).isEqualTo(1),
+                () -> assertThat(traces.get(0).getMemo()).isEqualTo(테스트_메모)
+        );
     }
 
 }
