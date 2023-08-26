@@ -28,7 +28,7 @@ public class BoothService {
     private final MemberRepository memberRepository;
     private final EntityManager em;
 
-    private static final Double SEARCH_MAX_DISTANCE = 2.0;
+    private static final Double SEARCH_MAX_DISTANCE = 10.0;
 
     @Transactional
     public BoothIdResponse save(final Long memberId, final BoothCreateRequest request) throws ParseException {
@@ -49,6 +49,32 @@ public class BoothService {
 
         return convertBoothsToDTOs(booths);
     }
+
+    @Transactional
+    public List<BoothDetail> findBoothsNearLocationByCategory(Double x, Double y, String category) {
+        Location northEast = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
+        Location southWest = GeometryUtil.calculate(x, y, SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
+
+        List<Booth> booths = searchBoothsWithinBoundsByCategory(northEast, southWest, category);
+
+        return convertBoothsToDTOs(booths);
+    }
+
+
+    public List<Booth> searchBoothsWithinBoundsByCategory(Location northEast, Location southWest, String category) {
+        String sql = "SELECT * FROM booths AS b WHERE b.category = '" + Category.from(category) + "' AND MBRContains(ST_Envelope(ST_GeomFromText('LINESTRING("
+                + northEast.getLatitude() + " " + northEast.getLongitude() + ", "
+                + southWest.getLatitude() + " " + southWest.getLongitude() + ")')), b.point)";
+
+        Query query = em.createNativeQuery(sql, Booth.class)
+                .setMaxResults(10);
+
+        return query.getResultList();
+    }
+
+
+
+
 
     public Point convertRequestToPoint(BoothCreateRequest request) throws ParseException {
         return convertLocationToPoint(request.getLocation());

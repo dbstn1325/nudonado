@@ -3,7 +3,7 @@ spring:
     active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/nudonado_db?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/nudonado_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=utf8
     username: root
     password: 1234
   jpa:

@@ -62,63 +62,48 @@ public class BoothServiceTest {
         );
     }
 
-    @DisplayName("사용자의 위치 반경 10m 내의 부스를 조회한다")
+    @DisplayName("사용자의 위치 반경 10km 내의 부스를 전체 조회한다")
     @Test
-    void 사용자의_위치_반경_10m_내의_부스를_조회한다() throws ParseException {
+    void 사용자의_위치_반경_10km_내의_부스를_전체_조회한다() throws ParseException {
         //given
-        Double userX = 테스트_위치.getLatitude();
-        Double userY = 테스트_위치.getLongitude();
-
         boothService.save(1L, BoothCreateRequest.builder()
                 .categoryType(테스트_카테고리)
                 .location(테스트_위치)
                 .build());
 
         //when
-        List<BoothDetail> nearbyBooths = boothService.findBoothsNearLocation(userX, userY);
+        List<BoothDetail> nearbyBooths = boothService.findBoothsNearLocation(테스트_위치.getLatitude(), 테스트_위치.getLongitude());
 
         //then
         assertAll(
                 () -> assertThat(nearbyBooths).isNotNull(),
                 () -> assertThat(nearbyBooths).isNotEmpty(),
-                // Verify that the found booth matches our test data
+                () -> assertThat(nearbyBooths.get(0).getLocation()).usingRecursiveComparison().isEqualTo(테스트_위치),
+                () -> assertThat(nearbyBooths.get(0).getCategory()).isEqualTo(테스트_카테고리)
+        );
+    }
+
+    @DisplayName("사용자의 위치 반경 10km 내의 부스를 카테고리별로 조회한다")
+    @Test
+    void 사용자의_위치_반경_10km_내의_부스를_카테고리별로_조회한다() throws ParseException {
+        //given
+        boothService.save(1L, BoothCreateRequest.builder()
+                .categoryType(테스트_카테고리)
+                .location(테스트_위치)
+                .build());
+
+        // when
+        List<BoothDetail> nearbyBooths = boothService.findBoothsNearLocationByCategory(테스트_위치.getLatitude(), 테스트_위치.getLongitude(), 테스트_카테고리);
+
+        System.out.println(nearbyBooths);
+        // then
+        assertAll(
+                () -> assertThat(nearbyBooths).isNotNull(),
+                () -> assertThat(nearbyBooths).isNotEmpty(),
                 () -> assertThat(nearbyBooths.get(0).getLocation()).usingRecursiveComparison().isEqualTo(테스트_위치),
                 () -> assertThat(nearbyBooths.get(0).getCategory()).isEqualTo(테스트_카테고리)
         );
     }
 
 
-    @Test
-    void testFindBoothsNearLocation() {
-        // Given: a location and some booths within the bounds
-        Double x = 40.0;  // latitude
-        Double y = -73.0; // longitude
-        Location location = new Location(x, y);
-
-        Booth booth1 = Booth.builder()
-                .member(null) // add actual Member object or make it nullable
-                .category(테스트_카테고리)
-                .location(location)
-                .point(null) // use appropriate Point object
-                .build();
-
-        Booth booth2 = Booth.builder()
-                .member(null) // add actual Member object or make it nullable
-                .category(테스트_카테고리)
-                .location(location)
-                .point(null) // use appropriate Point object
-                .build();
-
-        // Assuming a repository or a method that returns a list of booths for testing.
-        // For a real test, you'd have to set up a database and repository.
-        List<Booth> booths = List.of(booth1, booth2);
-
-        // When: we try to find booths near the given location
-        List<BoothDetail> boothDetails = boothService.findBoothsNearLocation(x, y);
-
-        // Then: we should get the booths we set up in the given location
-        assertEquals(2, boothDetails.size());
-        assertEquals(booth1.getId(), boothDetails.get(0).getId());
-        assertEquals(booth2.getId(), boothDetails.get(1).getId());
-    }
 }

@@ -36,4 +36,9 @@ public class BoothController {
         return boothService.findBoothsNearLocation(latitude, longitude);
     }
 
+    @GetMapping("/nearbyBooths/category")
+    public List<BoothDetail> getNearbyBooths(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam String category) {
+        return boothService.findBoothsNearLocationByCategory(latitude, longitude, category);
+    }
+
 }

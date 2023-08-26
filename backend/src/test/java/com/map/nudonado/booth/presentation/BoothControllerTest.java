@@ -70,8 +70,8 @@ class BoothControllerTest {
     }
 
     @Test
-    @DisplayName("사용자의 위치 반경 10m 내의 부스를 조회하면 200을 반환한다")
-    void 사용자의_위치_반경_10m_내의_부스를_조회하면_200을_반환한다() throws Exception {
+    @DisplayName("사용자의 위치 반경 10km 내의 부스를 조회하면 200을 반환한다")
+    void 사용자의_위치_반경_10km_내의_부스를_조회하면_200을_반환한다() throws Exception {
         // given
         BoothDetail boothDetail = BoothDetail.fromEntity(테스트_부스(member));  // Create a Booth object as needed
         List<BoothDetail> expectedBoothDetails = Collections.singletonList(boothDetail);
