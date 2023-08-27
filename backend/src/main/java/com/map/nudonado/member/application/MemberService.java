@@ -1,6 +1,7 @@
 package com.map.nudonado.member.application;
 
 
+import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.member.domain.MemberRepository;
 import com.map.nudonado.member.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +18,5 @@ public class MemberService {
     public MemberResponse findById(final Long id){
         return new MemberResponse(memberRepository.getById(id));
     }
+
 }
