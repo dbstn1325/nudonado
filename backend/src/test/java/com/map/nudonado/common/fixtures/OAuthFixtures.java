@@ -5,7 +5,8 @@ import com.map.nudonado.auth.dto.OAuthMember;
 public enum OAuthFixtures {
 
     관리자(관리자()),
-    윤수(윤수());
+    윤수(윤수()),
+    MEMBER(MEMBER());
 
     private OAuthMember oAuthMember;
 
@@ -29,7 +30,15 @@ public enum OAuthFixtures {
         return new OAuthMember(윤수_이메일, 윤수_이름, 윤수_프로필, 윤수_REFRESH_TOKEN);
     }
 
-    public OAuthMember getoAuthMember() {
+    private static OAuthMember MEMBER() {
+        String MEMBER_이메일 = "member@email.com";
+        String MEMBER_이름 = "member";
+        String MEMBER_프로필 = "/member.png";
+        String MEMBER_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
+        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필, MEMBER_REFRESH_TOKEN);
+    }
+
+    public OAuthMember getOAuthMember() {
         return oAuthMember;
     };
 

@@ -8,6 +8,6 @@ public class StubOAuthClient implements OAuthClient {
 
     @Override
     public OAuthMember getOAuthMember(final String code) {
-        return OAuthFixtures.윤수.getoAuthMember();
+        return OAuthFixtures.MEMBER.getOAuthMember();
     }
 }
