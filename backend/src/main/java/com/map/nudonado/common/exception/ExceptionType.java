@@ -1,5 +1,6 @@
 package com.map.nudonado.common.exception;
 
+import com.map.nudonado.auth.domain.exception.InvalidTokenException;
 import com.map.nudonado.booth.domain.exception.BoothCategoryNotFoundException;
 import com.map.nudonado.booth.domain.exception.BoothNotFoundException;
 import com.map.nudonado.trace.domain.exception.TraceMemoNullOrEmptyException;
@@ -13,6 +14,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 public enum ExceptionType {
+
+    INVALID_TOKEN_EXCEPTION("1001", "유효하지 않은 토큰입니다.", InvalidTokenException.class),
 
     BOOTH_NOT_FOUND_EXCEPTION("3001", "존재하지 않는 부스입니다.", BoothNotFoundException.class),
     BOOTH_CATEGORY_NOT_FOUND_EXCEPTION("3002", "존재하지 않는 카테고리입니다.", BoothCategoryNotFoundException.class),
