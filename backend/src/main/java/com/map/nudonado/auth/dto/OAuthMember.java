@@ -9,13 +9,12 @@ public class OAuthMember {
 
     private final String email;
     private final String displayName;
-    private final String profileImageUrl;
+//    private final String profileImageUrl;
     private final String refreshToken;
 
-    public OAuthMember(String email, String displayName, String profileImageUrl, String refreshToken) {
+    public OAuthMember(String email, String displayName, String refreshToken) {
         this.email = email;
         this.displayName = displayName;
-        this.profileImageUrl = profileImageUrl;
         this.refreshToken = refreshToken;
     }
 
@@ -23,7 +22,7 @@ public class OAuthMember {
         return Member.builder()
                     .email(email)
                     .displayName(displayName)
-                    .profileImageUrl(profileImageUrl)
+//                    .profileImageUrl(profileImageUrl)
                     .socialType(SocialType.GOOGLE)
                     .build();
     }

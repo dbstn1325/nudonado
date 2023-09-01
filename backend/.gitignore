@@ -1,4 +1,6 @@
 src/main/resources/*.yml
+src/main/resources/security/*.yml
+src/main/resources/security/README.md
 
 HELP.md
 .gradle

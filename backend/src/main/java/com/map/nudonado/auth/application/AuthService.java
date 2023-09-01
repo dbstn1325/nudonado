@@ -47,7 +47,9 @@ public class AuthService {
         return memberRepository.save(oAuthMember.toMember());
     }
 
-    private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
+    public AccessAndRefreshTokenResponse
+
+    public OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
         Long memberId = member.getId();
         if (oAuthTokenRepository.existsByMemberId(memberId)) {
             return oAuthTokenRepository.getByMemberId(memberId);

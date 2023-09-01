@@ -53,6 +53,11 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+	implementation 'com.google.code.gson:gson:2.10.1'
+
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
 }
 
 tasks.named('test') {
@@ -60,9 +65,9 @@ tasks.named('test') {
 }
 
 
-processResources.dependsOn('copySecret')
-tasks.register('copySecret', Copy) {
-	from './src/main/resources/security' //복사할 파일 위치
-	include "application*.yml"  // 복사할 파일들
-	into 'src/main/resources'  // 복사될 파일 위치
-}
+//processResources.dependsOn('copySecret')
+//tasks.register('copySecret', Copy) {
+//	from './src/main/resources/security' //복사할 파일 위치
+//	include "application*.yml"  // 복사할 파일들
+//	into 'src/main/resources'  // 복사될 파일 위치
+//}

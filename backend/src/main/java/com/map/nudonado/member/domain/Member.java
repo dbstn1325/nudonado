@@ -24,7 +24,7 @@ public class Member extends BaseEntity {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
-    @Column(name = "profile_image_url", nullable = false)
+    @Column(name = "profile_image_url", nullable = true)
     private String profileImageUrl;
 
     @Enumerated(value = EnumType.STRING)
