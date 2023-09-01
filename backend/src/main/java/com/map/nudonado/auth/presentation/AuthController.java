@@ -32,7 +32,4 @@ public class AuthController {
         return "redirect:webauthcallback://success?";
     }
 
-    @GetMa
-
-
 }
