@@ -70,4 +70,10 @@ public class AuthService {
         return new AccessTokenResponse(authToken.getAccessToken());
     }
 
+    public Long extractMemberId(final String accessToken) {
+        Long memberId = tokenCreator.extractPayload(accessToken);
+        memberRepository.validateExistsById(memberId);
+        return memberId;
+    }
+
 }

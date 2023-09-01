@@ -1,7 +1,9 @@
 package com.map.nudonado.common.exception;
 
+import com.map.nudonado.auth.domain.exception.EmptyAuthorizationHeaderException;
 import com.map.nudonado.auth.domain.exception.InvalidTokenException;
 import com.map.nudonado.auth.domain.exception.NotCorrespondTokenException;
+import com.map.nudonado.auth.domain.exception.WrongFormatTokenException;
 import com.map.nudonado.booth.domain.exception.BoothCategoryNotFoundException;
 import com.map.nudonado.booth.domain.exception.BoothNotFoundException;
 import com.map.nudonado.trace.domain.exception.TraceMemoNullOrEmptyException;
@@ -20,6 +22,8 @@ public enum ExceptionType {
     NOT_FOUND_OAUTH_TOKEN_EXCEPTION("1002", "존재하지 않는 토큰 입니다.", NotFoundException.class),
     NOT_MEMBER_REFRESH_TOKEN_EXCEPTION("1003", "회원의 리프레시 토큰이 아닙니다."),
     NOT_CORRESPOND_TOKEN_EXCEPTION("1004", "일치하는 토큰이 존재하지 않습니다.", NotCorrespondTokenException.class),
+    EMPTY_AUTHORIZATION_HEADER_EXCEPTION("1005", "헤더에 Authorization이 존재하지 않습니다.", EmptyAuthorizationHeaderException.class),
+    WRONG_FORMAT_TOKEN_EXCEPTION("1006", "token 형식이 잘못 되었습니다.", WrongFormatTokenException.class),
 
     BOOTH_NOT_FOUND_EXCEPTION("3001", "존재하지 않는 부스입니다.", BoothNotFoundException.class),
     BOOTH_CATEGORY_NOT_FOUND_EXCEPTION("3002", "존재하지 않는 카테고리입니다.", BoothCategoryNotFoundException.class),

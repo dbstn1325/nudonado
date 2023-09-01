@@ -2,6 +2,7 @@ package com.map.nudonado.auth.presentation;
 
 import com.map.nudonado.auth.application.AuthService;
 import com.map.nudonado.auth.application.OAuthClient;
+import com.map.nudonado.auth.dto.LoginMember;
 import com.map.nudonado.auth.dto.OAuthMember;
 import com.map.nudonado.auth.dto.request.TokenRenewalRequest;
 import com.map.nudonado.auth.dto.request.TokenRequest;
@@ -42,6 +43,12 @@ public class AuthController {
             @Valid @RequestBody final TokenRenewalRequest tokenRenewalRequest) {
         AccessTokenResponse response = authService.generateAccessToken(tokenRenewalRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/validate/token")
+    @ResponseBody
+    public ResponseEntity<Void> validateToken(@AuthenticationPrincipal final LoginMember loginMember) {
+        return ResponseEntity.ok().build();
     }
 
 }

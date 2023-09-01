@@ -44,4 +44,9 @@ public class AuthTokenCreator implements TokenCreator{
         return renewalAuthToken;
     }
 
+    public Long extractPayload(final String accessToken) {
+        tokenProvider.validateToken(accessToken);
+        return Long.valueOf(tokenProvider.getPayload(accessToken));
+    }
+
 }

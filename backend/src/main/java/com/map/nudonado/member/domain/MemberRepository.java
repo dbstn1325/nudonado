@@ -22,4 +22,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                 .orElseThrow(MemberNotFoundException::new);
 
     }
+
+    default void validateExistsById(final Long id) {
+        if (!existsById(id)) {
+            throw new MemberNotFoundException();
+        }
+    }
 }
