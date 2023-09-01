@@ -1,6 +1,9 @@
 package com.map.nudonado.auth.application;
 
+import com.map.nudonado.auth.domain.exception.InvalidTokenException;
+import com.map.nudonado.auth.dto.request.TokenRenewalRequest;
 import com.map.nudonado.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.map.nudonado.auth.dto.response.AccessTokenResponse;
 import com.map.nudonado.common.config.ExternalApiConfig;
 import com.map.nudonado.common.fixtures.OAuthFixtures;
 import com.map.nudonado.member.domain.Member;
@@ -83,6 +86,32 @@ class AuthServiceTest {
 
         //then
         assertThat(actual.getRefreshToken()).isEqualTo(response.getRefreshToken());
+    }
+
+    @DisplayName("리프레시 토큰으로 새로운 엑세스 토큰을 발급한다.")
+    @Test
+    void 리프레시_토큰으로_새로운_엑세스_토큰을_발급한다() {
+        //given
+        AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest(response.getRefreshToken());
+
+        //when
+        AccessTokenResponse accessTokenResponse = authService.generateAccessToken(tokenRenewalRequest);
+
+        //then
+        assertThat(accessTokenResponse.getAccessToken()).isNotEmpty();
+    }
+
+    @DisplayName("리프레시 토큰으로 새로운 엑세스 토큰을 발급 할 때, 리프레시 토큰이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void 리프레시_토큰으로_새로운_엑세스_토큰을_발급_할_때_리프레시_토큰이_존재하지_않으면_예외를_던진다() {
+        //given
+        authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
+        TokenRenewalRequest tokenRenewalRequest = new TokenRenewalRequest("DummyRefreshToken");
+
+        //when & then
+        assertThatThrownBy(() -> authService.generateAccessToken(tokenRenewalRequest))
+                .isInstanceOf(InvalidTokenException.class);
     }
 
 

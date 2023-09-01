@@ -19,7 +19,7 @@ public enum OAuthFixtures {
         String 관리자_이름 = "관리자";
         String 관리자_프로필 = "/admin.png";
         String 관리자_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
-        return new OAuthMember(관리자_이메일, 관리자_이름, 관리자_프로필, 관리자_REFRESH_TOKEN);
+        return new OAuthMember(관리자_이메일, 관리자_이름, 관리자_REFRESH_TOKEN);
     }
 
     private static OAuthMember 윤수() {
@@ -27,7 +27,7 @@ public enum OAuthFixtures {
         String 윤수_이름 = "윤수";
         String 윤수_프로필 = "/yoonsu.png";
         String 윤수_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
-        return new OAuthMember(윤수_이메일, 윤수_이름, 윤수_프로필, 윤수_REFRESH_TOKEN);
+        return new OAuthMember(윤수_이메일, 윤수_이름, 윤수_REFRESH_TOKEN);
     }
 
     private static OAuthMember MEMBER() {
@@ -35,7 +35,7 @@ public enum OAuthFixtures {
         String MEMBER_이름 = "member";
         String MEMBER_프로필 = "/member.png";
         String MEMBER_REFRESH_TOKEN = "aaaaaaaaaa.bbbbbbbbbb.cccccccccc";
-        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_프로필, MEMBER_REFRESH_TOKEN);
+        return new OAuthMember(MEMBER_이메일, MEMBER_이름, MEMBER_REFRESH_TOKEN);
     }
 
     public OAuthMember getOAuthMember() {

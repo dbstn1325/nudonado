@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider implements TokenProvider{
 
     private final SecretKey key;
     private final long accessTokenValidityInMilliseconds;
@@ -29,12 +29,12 @@ public class JwtTokenProvider {
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
     }
 
-
+    @Override
     public String createAccessToken(final String payload) {
         return createToken(payload, accessTokenValidityInMilliseconds);
     }
 
-
+    @Override
     public String createRefreshToken(final String payload) {
         return createToken(payload, refreshTokenValidityInMilliseconds);
     }
@@ -51,7 +51,8 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getPayload(String token) {
+    @Override
+    public String getPayload(final String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -60,15 +61,18 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public void validateToken(String token) {
+    @Override
+    public void validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
 
-            claims.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+            claims.getBody()
+                    .getExpiration()
+                    .before(new Date());
+        } catch (final JwtException | IllegalArgumentException e) {
             throw new InvalidTokenException();
         }
     }

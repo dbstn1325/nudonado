@@ -4,7 +4,9 @@ import com.map.nudonado.auth.domain.AuthToken;
 import com.map.nudonado.auth.domain.OAuthToken;
 import com.map.nudonado.auth.domain.OAuthTokenRepository;
 import com.map.nudonado.auth.dto.OAuthMember;
+import com.map.nudonado.auth.dto.request.TokenRenewalRequest;
 import com.map.nudonado.auth.dto.response.AccessAndRefreshTokenResponse;
+import com.map.nudonado.auth.dto.response.AccessTokenResponse;
 import com.map.nudonado.member.application.MemberService;
 import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.member.domain.MemberRepository;
@@ -47,9 +49,9 @@ public class AuthService {
         return memberRepository.save(oAuthMember.toMember());
     }
 
-    public AccessAndRefreshTokenResponse
 
-    public OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
+
+    private OAuthToken getOAuthToken(final OAuthMember oAuthMember, final Member member) {
         Long memberId = member.getId();
         if (oAuthTokenRepository.existsByMemberId(memberId)) {
             return oAuthTokenRepository.getByMemberId(memberId);
@@ -59,6 +61,13 @@ public class AuthService {
                         .member(member)
                         .refreshToken(oAuthMember.getRefreshToken())
                         .build());
+    }
+
+
+    public AccessTokenResponse generateAccessToken(final TokenRenewalRequest tokenRenewalRequest) {
+        String refreshToken = tokenRenewalRequest.getRefreshToken();
+        AuthToken authToken = tokenCreator.renewAuthToken(refreshToken);
+        return new AccessTokenResponse(authToken.getAccessToken());
     }
 
 }
