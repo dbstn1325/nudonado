@@ -34,6 +34,8 @@ class AuthServiceTest {
         //given & when
         AccessAndRefreshTokenResponse actual = authService.generateAccessAndRefreshToken(MEMBER.getOAuthMember());
 
+        System.out.println(actual.getAccessToken());
+        System.out.println(actual.getRefreshToken());
         //then
         assertAll(() -> {
             assertThat(actual.getAccessToken()).isNotEmpty();
@@ -82,6 +84,7 @@ class AuthServiceTest {
         //then
         assertThat(actual.getRefreshToken()).isEqualTo(response.getRefreshToken());
     }
+
 
 
 }
