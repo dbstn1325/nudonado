@@ -35,6 +35,17 @@ class MemberServiceTest {
 
     private Member member;
 
+    @DisplayName("회원을 조회한다.")
+    @Test
+    void 회원을_조회한다() {
+        //given
+        this.member = memberRepository.save(테스트_멤버());
+
+        //when & then
+        assertThat(memberService.findById(this.member.getId()).getId())
+                .isEqualTo(this.member.getId());
+    }
+
 
     @DisplayName("회원의 이름을 수정한다.")
     @Test
