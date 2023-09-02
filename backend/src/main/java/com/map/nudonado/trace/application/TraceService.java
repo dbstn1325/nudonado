@@ -32,7 +32,7 @@ public class TraceService {
 
         Trace trace = createTrace(member, booth, request);
 
-        return new TraceCreateResponse(traceRepository.save(trace));
+        return new TraceCreateResponse(traceRepository.save(trace).getId());
     }
 
     public List<IntegrationTrace> findBoothTraces(final Long memberId, final Long boothId){

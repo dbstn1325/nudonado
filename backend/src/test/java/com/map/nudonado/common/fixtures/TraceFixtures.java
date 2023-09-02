@@ -5,6 +5,8 @@ import com.map.nudonado.booth.domain.Category;
 import com.map.nudonado.booth.domain.Location;
 import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.trace.domain.Trace;
+import com.map.nudonado.trace.dto.request.TraceCreateRequest;
+import com.map.nudonado.trace.dto.response.TraceCreateResponse;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -19,6 +21,20 @@ public class TraceFixtures {
         return Trace.builder()
                 .member(creator)
                 .booth(booth)
+                .memo(테스트_메모)
+                .build();
+    }
+
+    public static TraceCreateResponse 테스트_흔적_생성_응답() {
+        return TraceCreateResponse
+                .builder()
+                .id(1L)
+                .build();
+    }
+
+    public static TraceCreateRequest 테스트_흔적_생성_요청() {
+        return TraceCreateRequest
+                .builder()
                 .memo(테스트_메모)
                 .build();
     }
