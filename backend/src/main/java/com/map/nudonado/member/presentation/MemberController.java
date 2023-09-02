@@ -1,6 +1,8 @@
 package com.map.nudonado.member.presentation;
 
 
+import com.map.nudonado.auth.dto.LoginMember;
+import com.map.nudonado.auth.presentation.AuthenticationPrincipal;
 import com.map.nudonado.member.application.MemberService;
 import com.map.nudonado.member.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +19,9 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/me/{memberId}")
-    public ResponseEntity<MemberResponse> findMe(@PathVariable Long memberId){
-        MemberResponse response = memberService.findById(memberId);
+    @GetMapping("/me")
+    public ResponseEntity<MemberResponse> findMe(@AuthenticationPrincipal LoginMember loginMember){
+        MemberResponse response = memberService.findById(loginMember.getId());
         return ResponseEntity.ok(response);
     }
 }
