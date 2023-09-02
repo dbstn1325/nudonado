@@ -25,6 +25,9 @@ public enum ExceptionType {
     EMPTY_AUTHORIZATION_HEADER_EXCEPTION("1005", "헤더에 Authorization이 존재하지 않습니다.", EmptyAuthorizationHeaderException.class),
     WRONG_FORMAT_TOKEN_EXCEPTION("1006", "token 형식이 잘못 되었습니다.", WrongFormatTokenException.class),
 
+    INVALID_MEMBER_EXCEPTION("2002", "잘못된 회원 정보입니다.", InvalidTokenException.class),
+
+
     BOOTH_NOT_FOUND_EXCEPTION("3001", "존재하지 않는 부스입니다.", BoothNotFoundException.class),
     BOOTH_CATEGORY_NOT_FOUND_EXCEPTION("3002", "존재하지 않는 카테고리입니다.", BoothCategoryNotFoundException.class),
 
