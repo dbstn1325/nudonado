@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RequestMapping("/api/booths")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class BoothController {
 
     private final BoothService boothService;
 
-    @PostMapping
+    @PostMapping("/booths")
     public ResponseEntity<BoothIdResponse> save(
             @AuthenticationPrincipal LoginMember loginMember,
             @Valid @RequestBody BoothCreateRequest request
@@ -32,12 +32,12 @@ public class BoothController {
         return ResponseEntity.status(HttpStatus.CREATED).body(boothIdResponse);
     }
 
-    @GetMapping("/nearbyBooths")
+    @GetMapping("/near/booths")
     public List<BoothDetail> getNearbyBooths(@RequestParam Double latitude, @RequestParam Double longitude) {
         return boothService.findBoothsNearLocation(latitude, longitude);
     }
 
-    @GetMapping("/nearbyBooths/category")
+    @GetMapping("/category/near/booths")
     public List<BoothDetail> getNearbyBooths(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam String category) {
         return boothService.findBoothsNearLocationByCategory(latitude, longitude, category);
     }

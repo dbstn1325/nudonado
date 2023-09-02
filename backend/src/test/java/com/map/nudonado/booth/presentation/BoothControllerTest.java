@@ -98,7 +98,7 @@ class BoothControllerTest {
                 .willReturn(expectedBoothDetails);
 
         // when & then
-        mockMvc.perform(get("/api/booths/nearbyBooths")
+        mockMvc.perform(get("/api/near/booths")
                         .param("latitude", String.valueOf(테스트_위치.getLatitude()))
                         .param("longitude", String.valueOf(테스트_위치.getLongitude())))
                 .andDo(print())
