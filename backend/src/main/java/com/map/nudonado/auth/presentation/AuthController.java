@@ -26,6 +26,11 @@ public class AuthController {
     private final OAuthClient oAuthClient;
     private final AuthService authService;
 
+    /**
+     * 유저가 최초 로그인 회원가입 시, accessToken, refreshToken 발급
+     * @param tokenRequest
+     * @return Flutter의 callbackUrlScheme를 통해 redirect 실행
+     */
     @GetMapping("/kakao/sign_in")
     public String generateAccessAndRefreshToken(@RequestParam("code") @Valid TokenRequest tokenRequest) {
 
@@ -37,6 +42,11 @@ public class AuthController {
         return "redirect:webauthcallback://success?";
     }
 
+    /**
+     * refreshToken을 통해 accessToken 재발급
+     * @param tokenRenewalRequest
+     * @return accessToken
+     */
     @PostMapping("/token/access")
     @ResponseBody
     public ResponseEntity<AccessTokenResponse> generateAccessToken(
