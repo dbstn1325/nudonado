@@ -55,6 +55,9 @@ dependencies {
 
 	implementation 'com.google.code.gson:gson:2.10.1'
 
+	// Restdocs
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
 
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
