@@ -2,6 +2,7 @@ package com.map.nudonado.common.fixtures;
 
 import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.member.domain.SocialType;
+import com.map.nudonado.member.dto.MemberResponse;
 import com.map.nudonado.member.dto.MemberUpdateRequest;
 
 public class MemberFixtures {
@@ -14,6 +15,15 @@ public class MemberFixtures {
 
     public static Member 테스트_멤버() {
         return new Member(테스트_이메일, 테스트_이름, 테스트_프로필, SocialType.GOOGLE);
+    }
+
+    public static MemberResponse 테스트_유저_정보_조회_응답() {
+        return MemberResponse.builder()
+                .id(1L)
+                .email(테스트_이메일)
+                .displayName(테스트_이름)
+                .profileImage(테스트_프로필)
+                .build();
     }
 
     public static MemberUpdateRequest 테스트_멤버_수정_요청() {

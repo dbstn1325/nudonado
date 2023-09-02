@@ -2,6 +2,7 @@ package com.map.nudonado.member.dto;
 
 import com.map.nudonado.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ public class MemberResponse {
     private String displayName;
     private String profileImage;
 
+    @Builder
     public MemberResponse(Long id, String email, String displayName, String profileImage) {
         this.id = id;
         this.email = email;

@@ -6,6 +6,7 @@ import com.map.nudonado.auth.domain.exception.NotCorrespondTokenException;
 import com.map.nudonado.auth.domain.exception.WrongFormatTokenException;
 import com.map.nudonado.booth.domain.exception.BoothCategoryNotFoundException;
 import com.map.nudonado.booth.domain.exception.BoothNotFoundException;
+import com.map.nudonado.member.exception.MemberNotFoundException;
 import com.map.nudonado.trace.domain.exception.TraceMemoNullOrEmptyException;
 import com.map.nudonado.trace.domain.exception.TraceMemoTooLongException;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public enum ExceptionType {
     EMPTY_AUTHORIZATION_HEADER_EXCEPTION("1005", "헤더에 Authorization이 존재하지 않습니다.", EmptyAuthorizationHeaderException.class),
     WRONG_FORMAT_TOKEN_EXCEPTION("1006", "token 형식이 잘못 되었습니다.", WrongFormatTokenException.class),
 
+    NOT_FOUND_MEMBER_EXCEPTION("2001", "존재하지 않는 회원입니다.", MemberNotFoundException.class),
     INVALID_MEMBER_EXCEPTION("2002", "잘못된 회원 정보입니다.", InvalidTokenException.class),
 
 
