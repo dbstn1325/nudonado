@@ -1,5 +1,7 @@
 package com.map.nudonado.trace.presentation;
 
+import com.map.nudonado.auth.dto.LoginMember;
+import com.map.nudonado.auth.presentation.AuthenticationPrincipal;
 import com.map.nudonado.trace.application.TraceService;
 import com.map.nudonado.trace.dto.request.TraceCreateRequest;
 import com.map.nudonado.trace.dto.response.IntegrationTrace;
@@ -19,24 +21,24 @@ public class TraceController {
 
     private final TraceService traceService;
 
-    @PostMapping("/{memberId}/{boothId}")
+    @PostMapping("/{boothId}")
     public ResponseEntity<TraceCreateResponse> save(
-            @PathVariable Long memberId,
+            @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long boothId,
             @Valid @RequestBody final TraceCreateRequest request
     ) {
-        TraceCreateResponse traceCreateResponse = traceService.save(memberId, boothId, request);
+        TraceCreateResponse traceCreateResponse = traceService.save(loginMember.getId(), boothId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(traceCreateResponse);
 
     }
 
 
-    @GetMapping("/{memberId}/{boothId}")
+    @GetMapping("/{boothId}")
     public ResponseEntity<List<IntegrationTrace>> findBoothTraces(
-            @PathVariable Long memberId,
+            @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long boothId
     ) {
-        List<IntegrationTrace> boothTraces = traceService.findBoothTraces(memberId, boothId);
+        List<IntegrationTrace> boothTraces = traceService.findBoothTraces(loginMember.getId(), boothId);
         return ResponseEntity.ok().body(boothTraces);
     }
 
