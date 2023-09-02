@@ -1,24 +1,33 @@
 package com.map.nudonado.booth.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.map.nudonado.auth.application.AuthService;
+import com.map.nudonado.auth.presentation.AuthController;
 import com.map.nudonado.booth.application.BoothService;
 import com.map.nudonado.booth.domain.BoothDetail;
 import com.map.nudonado.booth.dto.request.BoothCreateRequest;
+import com.map.nudonado.common.config.ExternalApiConfig;
 import com.map.nudonado.member.domain.Member;
 import com.map.nudonado.member.domain.MemberRepository;
+import com.map.nudonado.member.presentation.MemberController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
 
+import static com.map.nudonado.common.fixtures.AuthFixtures.토큰_정보;
 import static com.map.nudonado.common.fixtures.BoothFixtures.*;
 import static com.map.nudonado.common.fixtures.MemberFixtures.테스트_멤버;
 import static org.mockito.BDDMockito.given;
@@ -28,45 +37,55 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@WebMvcTest({
+        AuthController.class,
+        BoothController.class
+})
+@Import(ExternalApiConfig.class)
+@ActiveProfiles("test")
 class BoothControllerTest {
+
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
 
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private BoothService boothService;
 
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MemberRepository memberRepository;
+    @MockBean
+    protected AuthService authService;
 
     private final Member member = 테스트_멤버();
 
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        memberRepository.save(member);
     }
 
-    @Test
     @DisplayName("사용자가 부스를 생성하면 상태코드 201을 반환한다")
+    @Test
     void 사용자가_부스를_생성하면_상태코드_201을_반환한다() throws Exception {
         // given
-        Long memberId = member.getId();
         BoothCreateRequest request = new BoothCreateRequest(테스트_카테고리, 테스트_위치);
 
-        given(boothService.save(eq(memberId), any(BoothCreateRequest.class))).willReturn(부스_생성_응답);
+        given(boothService.save(any(), any(BoothCreateRequest.class))).willReturn(부스_생성_응답);
 
         // when & then
-        mockMvc.perform(post("/api/booths/{memberId}", memberId)
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/booths")
+                        .header(AUTHORIZATION_HEADER_NAME, 토큰_정보)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
+
+
 
     @Test
     @DisplayName("사용자의 위치 반경 10km 내의 부스를 조회하면 200을 반환한다")

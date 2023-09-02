@@ -1,6 +1,8 @@
 package com.map.nudonado.booth.presentation;
 
 
+import com.map.nudonado.auth.dto.LoginMember;
+import com.map.nudonado.auth.presentation.AuthenticationPrincipal;
 import com.map.nudonado.booth.application.BoothService;
 import com.map.nudonado.booth.domain.BoothDetail;
 import com.map.nudonado.booth.dto.response.BoothIdResponse;
@@ -21,12 +23,12 @@ public class BoothController {
 
     private final BoothService boothService;
 
-    @PostMapping("/{memberId}")
+    @PostMapping
     public ResponseEntity<BoothIdResponse> save(
-            @PathVariable Long memberId,
+            @AuthenticationPrincipal LoginMember loginMember,
             @Valid @RequestBody BoothCreateRequest request
     ) throws ParseException {
-        BoothIdResponse boothIdResponse = boothService.save(memberId, request);
+        BoothIdResponse boothIdResponse = boothService.save(loginMember.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(boothIdResponse);
     }
 
