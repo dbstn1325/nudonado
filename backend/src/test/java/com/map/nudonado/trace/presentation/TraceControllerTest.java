@@ -94,7 +94,7 @@ public class TraceControllerTest {
         given(boothService.save(any(), any(BoothCreateRequest.class))).willReturn(부스_생성_응답);
 
         // when & then
-        mockMvc.perform(get("/api/traces/{boothId}", boothId)
+        mockMvc.perform(get("/api/{boothId}/traces", boothId)
                         .header(AUTHORIZATION_HEADER_NAME, 토큰_정보)
                         .accept(MediaType.APPLICATION_JSON)
                 )

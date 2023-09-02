@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RequestMapping("/api/traces")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class TraceController {
 
     private final TraceService traceService;
 
-    @PostMapping("/{boothId}")
+    @PostMapping("/{boothId}/traces")
     public ResponseEntity<TraceCreateResponse> save(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long boothId,
@@ -33,7 +33,7 @@ public class TraceController {
     }
 
 
-    @GetMapping("/{boothId}")
+    @GetMapping("/{boothId}/traces")
     public ResponseEntity<List<IntegrationTrace>> findBoothTraces(
             @AuthenticationPrincipal LoginMember loginMember,
             @PathVariable Long boothId
