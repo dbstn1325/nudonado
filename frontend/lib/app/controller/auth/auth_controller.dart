@@ -4,6 +4,7 @@ import 'package:frontend/app/data/repository/auth/auth_repository.dart';
 import 'package:frontend/app/data/repository/home_repository.dart';
 import 'package:frontend/app/data/repository/member_repository.dart';
 import 'package:frontend/app/routes/nudonado_pages.dart';
+import 'package:frontend/app/ui/android/widgets/auth/expired_token_dialog.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
@@ -18,24 +19,12 @@ class AuthController extends GetxController {
 
   Future<void> validate() async {
     bool accessTokenValid = await authRepository.validateAccessToken();
-    if (accessTokenValid) {
-      Get.toNamed(Routes.DETAILS);
+    if (!accessTokenValid) {
+      Get.dialog(const ExpiredTokenDialog());
       return ;
     }
 
-    Get.dialog(
-      AlertDialog(
-        title: Text("토큰이 만료되었습니다.\n다시 로그인해주세요."),
-        actions: <Widget>[
-          ElevatedButton(
-            child: Text("OK"),
-            onPressed: () {
-              Get.back();
-            },
-          )
-        ],
-      ),
-    );
+    Get.toNamed(Routes.DETAILS);
   }
 
 

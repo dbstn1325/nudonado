@@ -89,6 +89,8 @@ class AuthApiClient {
       }
 
       print(response.statusCode);
+      storage.deleteAll();
+
       return true;
 
     } catch (e) {
