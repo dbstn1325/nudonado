@@ -37,9 +37,11 @@ public class AuthController {
         OAuthMember oAuthMember = oAuthClient.getOAuthMember(tokenRequest.getCode());
         AccessAndRefreshTokenResponse response = authService.generateAccessAndRefreshToken(oAuthMember);
 
-        System.out.println(response.getAccessToken());
-        System.out.println(response.getRefreshToken());
-        return "redirect:webauthcallback://success?";
+        String accessToken = response.getAccessToken();
+        String refreshToken = response.getRefreshToken();
+        System.out.println(accessToken);
+        System.out.println(refreshToken);
+        return "redirect:webauthcallback://success?accessToken=" + accessToken + "&refreshToken=" + refreshToken;
     }
 
     /**
