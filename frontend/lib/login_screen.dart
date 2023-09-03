@@ -1,5 +1,6 @@
 
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/app/controller/auth/auth_controller.dart';
 import 'package:frontend/app/ui/android/widgets/auth/login_button.dart';
 import 'package:frontend/login_platform.dart';
@@ -21,6 +22,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
   final controller = Get.find<AuthController>();
+  final storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  _initialize() async {
+    await controller.validate();
+
+  }
+
 
   void signOut() async {
     switch (_loginPlatform) {
