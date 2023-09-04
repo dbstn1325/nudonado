@@ -12,14 +12,14 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:uuid/uuid.dart';
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginPageState extends State<LoginPage> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
   final controller = Get.find<AuthController>();
   final storage = FlutterSecureStorage();
