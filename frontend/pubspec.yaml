@@ -41,6 +41,9 @@ dependencies:
   uuid: ^4.0.0
   envied: ^0.3.0+3
   flutter_secure_storage: ^8.1.0
+  google_maps_flutter: ^2.3.0
+  location: ^5.0.2+1
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:

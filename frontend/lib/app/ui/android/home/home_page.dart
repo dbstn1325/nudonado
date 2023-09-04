@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/app/controller/home/home_controller.dart';
 import 'package:frontend/app/ui/android/widgets/home/loading_widget.dart';
-import 'package:frontend/login_screen.dart';
+import 'package:frontend/app/ui/android/login/login_page.dart';
 import 'package:get/get.dart';
 
 class HomePage extends GetView<HomeController> {

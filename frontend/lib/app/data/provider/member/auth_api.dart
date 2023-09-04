@@ -9,7 +9,7 @@ import 'package:frontend/env/env.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-const authServerUri = 'http://172.21.7.92:8080/api/auth';
+const authServerUri = 'http://172.17.186.81:8080/api/auth';
 
 class AuthApiClient {
   final http.Client httpClient;
