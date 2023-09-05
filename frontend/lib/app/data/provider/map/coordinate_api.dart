@@ -1,19 +1,14 @@
-
-import 'dart:html';
-
 import 'package:frontend/app/data/model/map/coordinate_model.dart';
 import 'package:location/location.dart';
 
 class CoordinateClient {
 
   locateMe() async {
-    late double lat;
-    late double lng;
     Location location = new Location();
+    Coordinate coordinate = new Coordinate();
     late bool _serviceEnabled;
     late PermissionStatus _permissionGranted;
 
-    Coordinate coordinate = Coordinate(latitude: 35.15320067240981, longitude: 128.09971949420316);
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -30,14 +25,17 @@ class CoordinateClient {
       }
     }
     try {
-      await location.getLocation().then((res) {
-        return Coordinate(latitude: res.latitude!, longitude: res.longitude!)
-      });
 
-      return Coordinate(latitude: 35.15320067240981, longitude: 128.09971949420316);
-    }catch(e){
-      print(e);
+      LocationData res = await location.getLocation();
+      coordinate.setCooridnate(35.153173636585834, 128.09971913037515);
+      // coordinate.setCooridnate(res.latitude!, res.longitude!);
+      return coordinate;
+    } catch (e, stacktrace) {
+      print("발생 에러 : $e");
+      print("Stacktrace: $stacktrace");
+      return null;
     }
+
   }
 
 }

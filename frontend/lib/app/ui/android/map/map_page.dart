@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:frontend/app/controller/auth/auth_controller.dart';
+import 'package:frontend/app/controller/booth/booth_controller.dart';
+import 'package:frontend/app/controller/map/coordinate_controller.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -16,77 +16,59 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController? mapController;
+  final controller = Get.find<CoordinateController>();
+  final boothController = Get.find<BoothController>();
   Map<String, Marker> _markers = {};
   LatLng curLocation = LatLng(35.15320067240981, 128.09971949420316);
-
-
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(35.15320067240981, 128.09971949420316),
-    zoom: 14,
-  );
+  List<Record> selectedRecords = [];
 
   void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
     _controller.complete(controller);
   }
 
-  void _currentLocation() async {
-    final GoogleMapController controller = await _controller.future;
-    var location = new Location();
-
-    // Checking for permission
-    PermissionStatus permission = await location.hasPermission();
-    if (permission == PermissionStatus.denied ||
-        permission == PermissionStatus.deniedForever) {
-      permission = await location.requestPermission();
-      if (permission != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    LocationData? currentLocation;
-    try {
-      currentLocation = await location.getLocation();
-      print("Location: ${currentLocation.latitude}, ${currentLocation
-          .longitude}"); // Print location
-    } on Exception catch (e) {
-      print("Error fetching location: $e");
-      currentLocation = null;
-    }
-
-    if (currentLocation != null && currentLocation.latitude != null &&
-        currentLocation.longitude != null) {}
-
+  void moveToNewLocation(LatLng newLatLng) {
+    mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(CameraPosition(target: newLatLng, zoom: 17)),
+    );
   }
 
 
-  List<Record> selectedRecords = [];
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       body: Stack(
-          children:[ GoogleMap(
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: _onMapCreated,
-            myLocationEnabled: false,
-            myLocationButtonEnabled: false,
-            markers: _markers.values.toSet(),
-            onTap: (latLng) {   // Here we reset the selectedRecord when we tap outside the marker
-              setState(() {
-                selectedRecords = [];
-              });
-            },
-          ),
+          children:[
+            Obx(() {
+              LatLng currentCoord = LatLng(controller.myCoordinate.getLatitude, controller.myCoordinate.getLongitude);
+              print(currentCoord.latitude);
+              return GoogleMap(
+                initialCameraPosition: CameraPosition(target: currentCoord, zoom: 17),
+                myLocationEnabled: false,
+                myLocationButtonEnabled: false,
+                markers: _markers.values.toSet(),
+                onMapCreated: (controller) => _onMapCreated(controller),
+                onTap: (latLng) {
+                  setState(() {
+                    selectedRecords = [];
+                  });
+                },
+              );
+            }),
             Align(
               alignment: Alignment.bottomRight,
               child: InkWell(  // Wrapping the Container with InkWell
-                onTap: () {
-                  print("hi");
-                  // _currentLocation();
-                  addMarker('test', curLocation);
-                },
+                onTap: () async {
+                  await controller.getMyCoordinate();
+                  Future.delayed(Duration(milliseconds: 500), () {
+                    LatLng newLatLng = LatLng(controller.myCoordinate.getLatitude, controller.myCoordinate.getLongitude);
+                    moveToNewLocation(newLatLng);
+                  });
+                }
+                , // addMarker('test', curLocation),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(0, 0, 14.0, 180.0),
                   width: 60,
@@ -135,6 +117,44 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
               ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                child: Text("마커 고정"),
+                onPressed: () async {
+                  if (mapController != null) {
+                    LatLngBounds bounds = await mapController!.getVisibleRegion();
+                    LatLng centerLatLng = LatLng(
+                      (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
+                      (bounds.northeast.longitude + bounds.southwest.longitude) / 2,
+                    );
+
+                    addMarker('center_marker', centerLatLng);
+                  }
+                },
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 50,
+                height: 50,
+                margin: EdgeInsets.only(bottom: 40),
+                child: Image.asset("assets/images/haruflim_marker.png"),
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.center,
+              child: ElevatedButton(
+                  child: Text("부스 생성"),
+                  onPressed: () async {
+                    await boothController.createBooth();
+                  }
+              )
+            ),
+
 
           ]
       ),
@@ -143,11 +163,17 @@ class _MapPageState extends State<MapPage> {
 
 
 
+
   void addMarker(String id, LatLng location) async {
+    final ImageConfiguration imageConfiguration = ImageConfiguration(size: Size(20, 20)); // Change 48x48 to your desired size
     var markerIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(2, 2)),
-      'assets/images/four_picture.png',
+      imageConfiguration,
+      'assets/images/haruflim_marker.png',
     );
+
+    print("요청 위치!!");
+    print(location.latitude);
+    print(location.longitude);
 
     var marker = Marker(
       markerId: MarkerId(id),
@@ -180,3 +206,4 @@ class Record {
 
   Record({required this.title, required this.availability});
 }
+
