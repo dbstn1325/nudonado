@@ -15,7 +15,7 @@ class AuthController extends GetxController {
 
   Future<void> login() async {
     await authRepository.login();
-    Get.toNamed(Routes.MAP);
+    Get.toNamed(Routes.HOME);
   }
 
   Future<void> validate() async {
@@ -34,7 +34,7 @@ class AuthController extends GetxController {
     }
 
 
-    Get.toNamed(Routes.MAP);
+    Get.toNamed(Routes.HOME);
   }
 
 
