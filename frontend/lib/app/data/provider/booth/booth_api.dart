@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-const SERVER_URL = 'http://172.17.236.158:8080/api/';
+const SERVER_URL = 'http://172.21.4.174:8080/api/';
 
 class BoothApiClient {
   BoothApiClient({required this.httpClient});

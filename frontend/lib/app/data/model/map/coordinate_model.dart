@@ -1,32 +1,35 @@
 import 'package:get/get.dart';
-
 class Coordinate {
-  double latitude = 0.0;
-  double longitude = 0.0;
+  RxDouble latitude = 0.0.obs;
+  RxDouble longitude = 0.0.obs;
 
-  Coordinate({latitude, longitude});
+  Coordinate({double? latitude, double? longitude}) {
+    if (latitude != null) {
+      this.latitude.value = latitude;
+    }
+    if (longitude != null) {
+      this.longitude.value = longitude;
+    }
+  }
 
-  double get getLatitude => latitude;
-  double get getLongitude => longitude;
+  double get getLatitude => latitude.value;
+  double get getLongitude => longitude.value;
 
-  // Coordinate.setCoordinates(this.latitude, this.longitude);
-
-  void setCooridnate(double latitude, double longitude) {
-    this.latitude = latitude;
-    this.longitude = longitude;
+  void setCooridnate(double newLatitude, double newLongitude) {
+    this.latitude.value = newLatitude;
+    this.longitude.value = newLongitude;
   }
 
   Coordinate.fromJson(Map<String, dynamic> json) {
-    latitude = json['latitude'];
-    longitude = json['longitude'];
+    latitude.value = json['latitude'];
+    longitude.value = json['longitude'];
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude.value;
+    data['longitude'] = this.longitude.value;
     return data;
   }
-
 
 }

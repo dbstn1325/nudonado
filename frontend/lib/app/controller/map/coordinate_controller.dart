@@ -25,5 +25,9 @@ class CoordinateController extends GetxController {
     });
   }
 
+  void updateBoothCoordinate(double newLatitude, double newLongitude) {
+    _myCoordinate.value.setCooridnate(newLatitude, newLongitude);
+  }
+
 
 }
