@@ -33,8 +33,8 @@ class MemberController extends GetxController {
   editar(){
 
   }
-  details(post){
-    this.post = post;
-    Get.toNamed(Routes.DETAILS);
-  }
+  // details(post){
+  //   this.post = post;
+  //   Get.toNamed(Routes.HOME);
+  // }
 }
