@@ -9,7 +9,7 @@ import 'package:frontend/env/env.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-const authServerUri = 'http://172.17.186.81:8080/api/auth';
+const authServerUri = 'http://172.17.236.158:8080/api/auth';
 
 class AuthApiClient {
   final http.Client httpClient;
@@ -24,7 +24,6 @@ class AuthApiClient {
 
     try {
       final clientState = const Uuid().v4();
-      print("signIn 실행");
 
       final url = Uri.https('kauth.kakao.com', '/oauth/authorize', {
         'response_type': 'code',
@@ -43,6 +42,7 @@ class AuthApiClient {
       await storage.write(key: 'accessToken', value: param['accessToken']);
       await storage.write(key: 'refreshToken', value: param['refreshToken']);
 
+      print(param['accessToken']);
 
     }
     catch(e) {
@@ -50,7 +50,10 @@ class AuthApiClient {
     }
   }
 
-  postAccessToken(dynamic refreshToken) async{
+
+  Future<int> postRefreshToken(dynamic refreshToken) async{
+    final storage = FlutterSecureStorage();
+
     try {
       final response = await httpClient.post(
         Uri.parse('$authServerUri/token/access'),
@@ -60,20 +63,25 @@ class AuthApiClient {
         body: jsonEncode({'refreshToken': refreshToken}),
       );
 
-      if (response.statusCode != 200) {
-        // print(jsonDecode(utf8.decode(response.bodyBytes)));
-        throw Exception("액세스 토큰 발급에 대해 에러가 발생하였습니다.");
+      if (response.statusCode == 401) {
+        print(jsonDecode(utf8.decode(response.bodyBytes)));
+        return 401;
       }
 
-      AccessTokenResponse.fromJson(jsonDecode(response.body));
+      if(response.statusCode == 200) {
+        final accessToken = AccessTokenResponse.fromJson(jsonDecode(response.body)).accessToken;
+        await storage.write(key: 'accessToken', value: accessToken);
+        return 200;
+      }
+
+      return 000;
     } catch(e) {
       print(e);
+      return 001;
     }
     
   }
-  Future<bool> validateAccessToken(dynamic accessToken) async {
-    print("자동 로그인을 위한 유효성 검증 start!");
-    final storage = FlutterSecureStorage();
+  Future<int> validateAccessToken(dynamic accessToken) async {
     try {
       final response = await httpClient.get(
         Uri.parse('$authServerUri/validate/token'),
@@ -82,20 +90,21 @@ class AuthApiClient {
         },
       );
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 401) {
         print(response.statusCode);
         print(utf8.decode(response.bodyBytes));
-        return false;
+        print("만료된 액세스 토큰");
+        return 401;
+      } if(response.statusCode == 200){
+        print("유효한 액세스 토큰");
+        return 200;
       }
 
-      print(response.statusCode);
-      storage.deleteAll();
-
-      return true;
+      return 000;
 
     } catch (e) {
       print(e);
-      return false;
+      return 001;
     }
   }
 

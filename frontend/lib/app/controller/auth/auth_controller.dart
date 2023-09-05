@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/app/data/model/member.dart';
 import 'package:frontend/app/data/repository/auth/auth_repository.dart';
 import 'package:frontend/app/data/repository/home_repository.dart';
@@ -18,11 +19,20 @@ class AuthController extends GetxController {
   }
 
   Future<void> validate() async {
+    final storage = FlutterSecureStorage();
+    bool containsKey = await storage.containsKey(key: 'accessToken');
+
+    // if(!containsKey){
+    //   return ;
+    // }
+
     bool accessTokenValid = await authRepository.validateAccessToken();
+    print(accessTokenValid);
     if (!accessTokenValid) {
       Get.dialog(const ExpiredTokenDialog());
       return ;
     }
+
 
     Get.toNamed(Routes.MAP);
   }

@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _initialize() async {
-    await controller.validate();
+    var name = await controller.validate();
 
   }
 
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ),
             SizedBox(height: 30,),
-            LoginButton(path: "kakao_logo", onTap: () {controller.login(); })
+            LoginButton(path: "kakao_logo", onTap: () { controller.login(); })
           ],
         ),
       ),
