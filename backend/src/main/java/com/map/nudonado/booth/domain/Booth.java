@@ -28,6 +28,18 @@ public class Booth extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    private String title;
+
+    @Column(name = "is_timer", nullable = false)
+    private boolean isTimer;
+
+    @Column(name = "is_curling_iron", nullable = false)
+    private boolean isCurlingIron;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "background_color_diversity", nullable = false)
+    private BackgroundColorDiversity backgroundColorDiversity;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private Category category;
@@ -43,8 +55,13 @@ public class Booth extends BaseEntity {
     private Point point;
 
     @Builder
-    public Booth(Member member, String category, Location location, Point point) {
+
+    public Booth(Member member, String title, boolean isTimer, boolean isCurlingIron, String backgroundColorDiversity, String category, Location location, Point point) {
         this.member = member;
+        this.title = title;
+        this.isTimer = isTimer;
+        this.isCurlingIron = isCurlingIron;
+        this.backgroundColorDiversity = BackgroundColorDiversity.from(backgroundColorDiversity);
         this.category = Category.from(category);
         this.location = location;
         this.point = point;

@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 @Getter
 public enum Category {
-    LIFEFOURUCUT("lifefourcut"),
-    SELFLEX("selflex"),
-    PHOTOMATIC("photomatic"),
-    HARUFILM("harufilm");
+    LIFEFOURUCUT("인생 네컷"),
+    SELFLEX("셀플릭스"),
+    PHOTOMATIC("포토 매틱"),
+    HARUFILM("하루 필름");
 
     private final String value;
 
