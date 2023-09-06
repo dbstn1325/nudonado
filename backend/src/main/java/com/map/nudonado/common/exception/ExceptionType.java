@@ -4,6 +4,7 @@ import com.map.nudonado.auth.domain.exception.EmptyAuthorizationHeaderException;
 import com.map.nudonado.auth.domain.exception.InvalidTokenException;
 import com.map.nudonado.auth.domain.exception.NotCorrespondTokenException;
 import com.map.nudonado.auth.domain.exception.WrongFormatTokenException;
+import com.map.nudonado.booth.domain.exception.BoothBackgroundColorDiversityNotFoundException;
 import com.map.nudonado.booth.domain.exception.BoothCategoryNotFoundException;
 import com.map.nudonado.booth.domain.exception.BoothNotFoundException;
 import com.map.nudonado.member.exception.MemberNotFoundException;
@@ -32,6 +33,7 @@ public enum ExceptionType {
 
     BOOTH_NOT_FOUND_EXCEPTION("3001", "존재하지 않는 부스입니다.", BoothNotFoundException.class),
     BOOTH_CATEGORY_NOT_FOUND_EXCEPTION("3002", "존재하지 않는 카테고리입니다.", BoothCategoryNotFoundException.class),
+    BOOTH_BACKGROUND_COLOR_DIVERSITY_NOT_FOUND_EXCEPTION("3003", "존재하지 않는 배경색 다양 유무입니다.", BoothBackgroundColorDiversityNotFoundException.class),
 
     TRACE_MEMO_NULL_OR_EMPTY_EXCEPTION("4001", "흔적 메모리 길이를 한 글자 이상 입력해야합니다.", TraceMemoNullOrEmptyException.class),
     TRACE_MEMO_TOO_LONG_EXCEPTION("4002", "흔적 메모의 길이는 255 글자를 초과할 수 없습니다.", TraceMemoTooLongException.class),
