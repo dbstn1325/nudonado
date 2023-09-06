@@ -1,2 +1,6 @@
-package com.map.nudonado.booth.domain.exception;public class BoothBackgroundColorDiversityNotFoundException {
+package com.map.nudonado.booth.domain.exception;
+
+import com.map.nudonado.common.exception.NotFoundException;
+
+public class BoothBackgroundColorDiversityNotFoundException extends NotFoundException {
 }
