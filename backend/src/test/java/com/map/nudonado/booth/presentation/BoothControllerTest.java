@@ -71,7 +71,7 @@ class BoothControllerTest {
     @Test
     void 사용자가_부스를_생성하면_상태코드_201을_반환한다() throws Exception {
         // given
-        BoothCreateRequest request = new BoothCreateRequest(테스트_카테고리, 테스트_위치);
+        BoothCreateRequest request = 부스_생성_요청();
 
         given(boothService.save(any(), any(BoothCreateRequest.class))).willReturn(부스_생성_응답);
 

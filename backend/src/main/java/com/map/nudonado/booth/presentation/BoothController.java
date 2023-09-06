@@ -25,8 +25,8 @@ public class BoothController {
 
     @PostMapping("/booths")
     public ResponseEntity<BoothIdResponse> save(
-            @AuthenticationPrincipal LoginMember loginMember,
-            @Valid @RequestBody BoothCreateRequest request
+            @AuthenticationPrincipal final LoginMember loginMember,
+            @Valid @RequestBody final BoothCreateRequest request
     ) throws ParseException {
         BoothIdResponse boothIdResponse = boothService.save(loginMember.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(boothIdResponse);
