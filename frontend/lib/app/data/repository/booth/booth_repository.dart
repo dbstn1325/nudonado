@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/app/data/model/booth/booth.dart';
 import 'package:frontend/app/data/provider/booth/booth_api.dart';
 import 'package:frontend/app/data/provider/member/auth_api.dart';
 import 'package:frontend/app/data/provider/member/get_member_api.dart';
@@ -11,8 +12,8 @@ class BoothRepository {
 
   BoothRepository({required this.boothApiClient});
 
-  postBooth() async{
-    return await boothApiClient.postBooth();
+  postBooth(Booth booth) async{
+    return await boothApiClient.postBooth(booth);
   }
 
 
