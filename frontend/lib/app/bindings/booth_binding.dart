@@ -1,6 +1,8 @@
 
 import 'package:frontend/app/controller/auth/auth_controller.dart';
+import 'package:frontend/app/controller/booth/booth_category_controller.dart';
 import 'package:frontend/app/controller/booth/booth_controller.dart';
+import 'package:frontend/app/controller/booth/checkbox_controller.dart';
 import 'package:frontend/app/controller/home/home_controller.dart';
 import 'package:frontend/app/data/provider/booth/booth_api.dart';
 import 'package:frontend/app/data/provider/member/auth_api.dart';
@@ -14,6 +16,9 @@ import 'package:get/get.dart';
 class BoothBinding implements Bindings {
   @override
   void dependencies() {
+    Get.lazyPut<CheckboxController>(() => CheckboxController());
+    Get.lazyPut<BoothCategoryController>(()=> BoothCategoryController());
+    Get.lazyPut<CheckboxController>(()=> CheckboxController());
     Get.lazyPut<BoothController>(() {
       return BoothController(
           boothRepository:

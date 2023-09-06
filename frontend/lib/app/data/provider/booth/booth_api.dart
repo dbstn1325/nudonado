@@ -3,9 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:frontend/app/controller/booth/booth_category_controller.dart';
+import 'package:frontend/app/controller/booth/checkbox_controller.dart';
 import 'package:frontend/app/controller/map/coordinate_controller.dart';
 
 import 'package:frontend/app/data/model/auth/access_token_response.dart';
+import 'package:frontend/app/data/model/booth/booth.dart';
 import 'package:frontend/app/data/model/booth/booth_request.dart';
 import 'package:frontend/app/data/model/booth/booth_response.dart';
 import 'package:frontend/app/data/model/booth/location.dart';
@@ -16,28 +19,32 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-const SERVER_URL = 'http://172.21.4.174:8080/api/';
+const SERVER_URL = 'http://192.168.0.29:8080/api/';
 
 class BoothApiClient {
   BoothApiClient({required this.httpClient});
   final http.Client httpClient;
-  final cooridnateController = Get.put(CoordinateController(repository: CoordinateRepository(coordinateClient: CoordinateClient())));
+  final coordinateController = Get.put(CoordinateController(repository: CoordinateRepository(coordinateClient: CoordinateClient())));
+  final checkboxController = Get.find<CheckboxController>();
+  final categoryController = Get.find<BoothCategoryController>();
 
-  postBooth() async {
+  postBooth(Booth booth) async {
     final storage = FlutterSecureStorage();
 
-    print("booth 실행");
     var url = Uri.parse(SERVER_URL + 'booths');
     BoothRequest request = BoothRequest(
-      categoryType: "selflex",
+      title: booth.storeName.value,
+      isTimer: checkboxController.isTimer.value,
+      isCurlingIron: checkboxController.isCurlingIron.value,
+      backgroundColorDiversity: checkboxController.selectedBackgroundOption.value,
+      categoryType: categoryController.categoryModel.selectedCategory.value,
       location: Location(
-        latitude: 35.19754414695399,
-        longitude: 128.1671744126717,
+        latitude: coordinateController.myCoordinate!.latitude.value,
+        longitude: coordinateController.myCoordinate!.longitude.value
       ),
     );
 
     final accessToken = await storage.read(key: 'accessToken');
-
     try {
       final response = await httpClient.post(url,
           headers: {
