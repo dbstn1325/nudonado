@@ -20,6 +20,7 @@ public class BoothFixtures {
     public static final String 테스트_카테고리 = Category.LIFEFOURUCUT.getValue();
     public static final String 테스트_카테고리_인생네컷 = Category.LIFEFOURUCUT.getValue();
     public static final String 테스트_카테고리_셀플릭스 = Category.LIFEFOURUCUT.getValue();
+    public static final String 테스트_없는_부스_다양성_유무 = "높음";
 
     public static Point createPointFromLocation(Location location) throws ParseException {
         String pointWKT = String.format("POINT(%s %s)", location.getLatitude(), location.getLongitude());
