@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 @Getter
 public enum BackgroundColorDiversity {
-    HIGH("상"),
-    MEDIUM("중"),
-    LOW("하");
+    HIGH("3개 이상"),
+    MEDIUM("2개"),
+    LOW("1개");
 
     private final String level;
 
