@@ -8,7 +8,7 @@ import java.util.Arrays;
 @Getter
 public enum Category {
     LIFEFOURUCUT("인생 네컷"),
-    SELFLEX("셀플릭스"),
+    SELFLEX("셀플렉스"),
     PHOTOMATIC("포토 매틱"),
     HARUFILM("하루 필름");
 
