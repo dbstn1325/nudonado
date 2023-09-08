@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/app/controller/booth/booth_category_controller.dart';
 import 'package:get/get.dart';
 
-const List<String> list = <String>['인생 네컷', '셀플릭스', '포토 매틱', '하루 필름'];
+const List<String> list = <String>['인생 네컷', '셀플렉스', '포토 매틱', '하루 필름'];
 
 class BoothCategoryDropBox extends StatefulWidget {
   const BoothCategoryDropBox({super.key});
