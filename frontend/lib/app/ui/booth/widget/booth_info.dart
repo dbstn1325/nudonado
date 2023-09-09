@@ -1,8 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/app/controller/booth/booth_controller.dart';
+import 'package:get/get.dart';
 
 Widget boothInfo() {
+  final boothController = Get.find<BoothController>();
   final textController = TextEditingController();
+
+  textController.addListener(() {
+    boothController.booth.setStoreName(textController.text);
+  });
 
   return Column(
     children: [

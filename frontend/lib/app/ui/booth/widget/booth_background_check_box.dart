@@ -10,7 +10,7 @@ Widget boothBackgroundCheckbox() {
     children: [
       Text("배경색 다양 정도"),
       Row(
-        children: ["상", "중", "하"].map((option) {
+        children: ["3개 이상", "2개", "1개"].map((option) {
           return Expanded(
             child: Obx(() => CheckboxListTile(
               title: Text(option),

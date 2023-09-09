@@ -16,5 +16,13 @@ class BoothRepository {
     return await boothApiClient.postBooth(booth);
   }
 
+  getNearBooths() async {
+    return await boothApiClient.getNearBooths();
+  }
+
+  getInfoByBoothId(int boothId) async {
+    return await boothApiClient.getInfoByBoothId(boothId);
+  }
+
 
 }

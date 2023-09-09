@@ -16,11 +16,11 @@ class BoothWritePage extends StatelessWidget {
   final textController = TextEditingController();
 
 
-  BoothWritePage() {
-    textController.addListener(() {
-      boothController.booth.setStoreName(textController.text);
-    });
-  }
+  // BoothWritePage() {
+  //   textController.addListener(() {
+  //     boothController.booth.setStoreName(textController.text);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

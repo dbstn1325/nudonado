@@ -5,11 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:frontend/app/controller/booth/booth_controller.dart';
 import 'package:frontend/app/controller/map/coordinate_controller.dart';
 import 'package:frontend/app/controller/map/marker_controller.dart';
+import 'package:frontend/app/controller/trace/trace_controller.dart';
 import 'package:frontend/app/data/provider/map/google_map_service.dart';
 import 'package:frontend/app/ui/android/map/widget/Record.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
+
+import 'widget/scrollable_booth_info.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -27,7 +30,7 @@ class _MapPageState extends State<MapPage> {
   LatLng curLocation = LatLng(35.15320067240981, 128.09971949420316);
   bool isWriteVisiable = false;
   final GoogleMapService googleMapService = GoogleMapService();
-
+  final traceController = Get.find<TraceController>();
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -73,6 +76,7 @@ class _MapPageState extends State<MapPage> {
                   // This shifts it up a bit
                   child: InkWell(
                     onTap: () {
+                      print('hello${coordinateController.selectedRecord?.boothId.value}');
 
                       // boothController.get
                     },
@@ -134,46 +138,7 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
           ),
-          Obx(() {
-            if (coordinateController.selectedRecord != null) {
-              return Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  height: 130.0,
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  margin: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40.0),
-                    boxShadow: [
-                    BoxShadow(
-                    color: Colors.black12,
-                    spreadRadius: 0,
-                    blurRadius: 5,
-                    offset: Offset(0, 3),
-                  ),
-                  ],),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("매장 명 :${coordinateController.selectedRecord!.title}"),
-                        Text("타이머 유무 : ${coordinateController.selectedRecord!.isTimer}"),
-                        Text("고데기 유무 : ${coordinateController.selectedRecord!.isCurlingIron}"),
-                        Text("배경색 다양 정도 : ${coordinateController.selectedRecord!.backgroundColorDiversity}")
-                      ],
-                    ),
-
-                  ),
-                ),
-              );
-            }
-            return SizedBox.shrink();
-          }),
-
-
+          ScrollableBoothInfo(context),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -261,13 +226,14 @@ class _MapPageState extends State<MapPage> {
           title: title,
           snippet: categoryName
       ),
-      onTap: () {   // Here we set the selectedRecord when a marker is tapped
+      onTap: () async {   // Here we set the selectedRecord when a marker is tapped
           coordinateController.clearSelectedRecord();
           coordinateController.updateSelectedRecord(Record(boothId: int.parse(id), title: title, isTimer: isTimer, isCurlingIron: isCurlingIron, backgroundColorDiversity: backgroundColorDiversity));
           // coordinateController.selectedRecords.value.map((element) => print('hello${element.title}'));
           markerController.turnOnIsWrited();
           print(markerController.isWriteVisible.value);
           boothController.getInfoByBoothId(int.parse(id));
+          traceController.getTraces();
       },
       icon: BitmapDescriptor.fromBytes(markerIcon),
     );

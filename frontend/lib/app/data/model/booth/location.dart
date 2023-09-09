@@ -11,4 +11,11 @@ class Location {
     'latitude': latitude,
     'longitude': longitude,
   };
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+    );
+  }
 }
