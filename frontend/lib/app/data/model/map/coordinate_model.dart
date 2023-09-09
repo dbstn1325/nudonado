@@ -3,6 +3,7 @@ class Coordinate {
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
 
+
   Coordinate({double? latitude, double? longitude}) {
     if (latitude != null) {
       this.latitude.value = latitude;
@@ -19,6 +20,7 @@ class Coordinate {
     this.latitude.value = newLatitude;
     this.longitude.value = newLongitude;
   }
+
 
   Coordinate.fromJson(Map<String, dynamic> json) {
     latitude.value = json['latitude'];

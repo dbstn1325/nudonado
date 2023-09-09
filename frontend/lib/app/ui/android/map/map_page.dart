@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:frontend/app/controller/auth/auth_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/app/controller/booth/booth_controller.dart';
 import 'package:frontend/app/controller/map/coordinate_controller.dart';
+import 'package:frontend/app/controller/map/marker_controller.dart';
+import 'package:frontend/app/data/provider/map/google_map_service.dart';
+import 'package:frontend/app/ui/android/map/widget/Record.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -17,11 +21,13 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapController;
-  final controller = Get.find<CoordinateController>();
+  final coordinateController = Get.find<CoordinateController>();
   final boothController = Get.find<BoothController>();
-  Map<String, Marker> _markers = {};
+  final markerController = Get.put(MarkerController());
   LatLng curLocation = LatLng(35.15320067240981, 128.09971949420316);
-  List<Record> selectedRecords = [];
+  bool isWriteVisiable = false;
+  final GoogleMapService googleMapService = GoogleMapService();
+
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -39,31 +45,71 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
 
+
     return Stack(
         children:[
           Obx(() {
-            LatLng currentCoord = LatLng(controller.myCoordinate.getLatitude, controller.myCoordinate.getLongitude);
+            LatLng currentCoord = LatLng(coordinateController.myCoordinate.getLatitude, coordinateController.myCoordinate.getLongitude);
             print(currentCoord.latitude);
             return GoogleMap(
               initialCameraPosition: CameraPosition(target: currentCoord, zoom: 17),
               myLocationEnabled: false,
               myLocationButtonEnabled: false,
-              markers: _markers.values.toSet(),
+              markers: markerController.markers.values.toSet(),
               onMapCreated: (controller) => _onMapCreated(controller),
               onTap: (latLng) {
-                setState(() {
-                  selectedRecords = [];
-                });
+                  coordinateController.clearSelectedRecord();
+                  markerController.turnOffIsWrited();
               },
             );
           }),
+          Obx(() {
+            if (markerController.isWriteVisible.value) {
+              double height = MediaQuery.of(context).size.height;
+              return Padding(
+                padding: EdgeInsets.only(top: height * (1/2)),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  // This shifts it up a bit
+                  child: InkWell(
+                    onTap: () {
+
+                      // boothController.get
+                    },
+                    child: Container(
+
+                      margin: EdgeInsets.fromLTRB(0, 0, 21.0, 70.0),
+                      // Adjust the margin so it's placed above the other icon
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(40.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(CupertinoIcons.pencil, color: Colors.black,),
+                    ),
+                  ),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          }),
+
           Align(
             alignment: Alignment.bottomRight,
             child: InkWell(  // Wrapping the Container with InkWell
               onTap: () async {
-                await controller.getMyCoordinate();
+                await coordinateController.getMyCoordinate();
                 Future.delayed(Duration(milliseconds: 500), () {
-                  LatLng newLatLng = LatLng(controller.myCoordinate.getLatitude, controller.myCoordinate.getLongitude);
+                  LatLng newLatLng = LatLng(coordinateController.myCoordinate.getLatitude, coordinateController.myCoordinate.getLongitude);
                   moveToNewLocation(newLatLng);
                 });
               }
@@ -88,128 +134,151 @@ class _MapPageState extends State<MapPage> {
               ),
             ),
           ),
-          if (selectedRecords.isNotEmpty)
-            Align(
-              alignment: Alignment.bottomCenter.add(Alignment(0, -0.1)),  // This shifts it up a bit
-              child: Container(
-                height: 130.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: selectedRecords.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      margin: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(40.0),  // Radius for each Record object
-                        boxShadow: [  // Optional: To give a slight elevation effect
-                          BoxShadow(
-                            color: Colors.black12,
-                            spreadRadius: 0,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("매장 명: ${selectedRecords[index].title}"),
-                          Text("고데기 유무: ${selectedRecords[index].availability}")
-                        ],
-                      ),
-                    );
-                  },
+          Obx(() {
+            if (coordinateController.selectedRecord != null) {
+              return Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                  height: 130.0,
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  margin: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40.0),
+                    boxShadow: [
+                    BoxShadow(
+                    color: Colors.black12,
+                    spreadRadius: 0,
+                    blurRadius: 5,
+                    offset: Offset(0, 3),
+                  ),
+                  ],),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("매장 명 :${coordinateController.selectedRecord!.title}"),
+                        Text("타이머 유무 : ${coordinateController.selectedRecord!.isTimer}"),
+                        Text("고데기 유무 : ${coordinateController.selectedRecord!.isCurlingIron}"),
+                        Text("배경색 다양 정도 : ${coordinateController.selectedRecord!.backgroundColorDiversity}")
+                      ],
+                    ),
+
+                  ),
                 ),
+              );
+            }
+            return SizedBox.shrink();
+          }),
+
+
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.only(top: 100),
+              width: 150,
+              child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      shadowColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      elevation: 3.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      side: BorderSide(
+                        color: Colors.white,
+                        width: 2.0,
+                      )
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 10.0),
+                        child: Icon(
+                          CupertinoIcons.arrow_clockwise,
+                          color: Colors.black,
+                          size: 17.0,
+                        ),
+                      ),
+                      Text("이 지역 재검색", style: TextStyle(color: Colors.black),),
+                    ],
+                  ),
+                  onPressed: () async {
+                    await boothController.getNearBooths();
+                    addBoothMarkers();
+                  }
               ),
-            ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: ElevatedButton(
-          //     child: Text("마커 고정"),
-          //     onPressed: () async {
-          //       if (mapController != null) {
-          //         LatLngBounds bounds = await mapController!.getVisibleRegion();
-          //         LatLng centerLatLng = LatLng(
-          //           (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
-          //           (bounds.northeast.longitude + bounds.southwest.longitude) / 2,
-          //         );
-          //
-          //         addMarker('center_marker', centerLatLng);
-          //       }
-          //     },
-          //   ),
-          // ),
-
-          // Align(
-          //   alignment: Alignment.center,
-          //   child: Container(
-          //     width: 50,
-          //     height: 50,
-          //     margin: EdgeInsets.only(bottom: 40),
-          //     child: Image.asset("assets/images/haruflim_marker.png"),
-          //   ),
-          // ),
-
-          // Align(
-          //   alignment: Alignment.center,
-          //   child: ElevatedButton(
-          //       child: Text("부스 생성"),
-          //       onPressed: () async {
-          //         await boothController.createBooth();
-          //       }
-          //   )
-          // ),
-
+            )
+          ),
 
         ]
     );
 }
 
 
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
+  void addBoothMarkers() {
+    for (var booth in boothController.booths) {
+      print(booth.categoryImgSrc.toString());
+      addMarker(booth.id.toString(),
+          booth.title.toString(),
+          booth.categoryImgSrc.toString(),
+          booth.categoryName.toString(),
+          LatLng(booth.location.latitude,
+          booth.location.longitude),
+          booth.isTimer.toString(),
+          booth.isCurlingIron.toString(),
+          booth.backgroundColorDiversity.toString()
+      );
+    }
+  }
 
 
-  void addMarker(String id, LatLng location) async {
-    final ImageConfiguration imageConfiguration = ImageConfiguration(size: Size(20, 20)); // Change 48x48 to your desired size
-    var markerIcon = await BitmapDescriptor.fromAssetImage(
-      imageConfiguration,
-      'assets/images/haruflim_marker.png',
-    );
-
-    print("요청 위치!!");
-    print(location.latitude);
-    print(location.longitude);
-
-    var marker = Marker(
+  void addMarker(String id,
+      String title,
+      String categoryImgSrc,
+      String categoryName,
+      LatLng location,
+      String isTimer,
+      String isCurlingIron,
+      String backgroundColorDiversity
+      ) async {
+    print(categoryImgSrc);
+    final Uint8List markerIcon = await getBytesFromAsset('assets/images/${categoryImgSrc}.png', 200);
+    final marker = Marker(
       markerId: MarkerId(id),
       position: location,
-      infoWindow: const InfoWindow(
-          title: '인생 네컷',
-          snippet: '친구들과 함께 사진을 찍어용'
+      infoWindow: InfoWindow(
+          title: title,
+          snippet: categoryName
       ),
       onTap: () {   // Here we set the selectedRecord when a marker is tapped
-        setState(() {
-          selectedRecords!.add(Record(title: "인생네컷 강남지점", availability: "N"));
-          selectedRecords!.add(Record(title: "인생네컷 강남지점", availability: "N"));
-        });
+          coordinateController.clearSelectedRecord();
+          coordinateController.updateSelectedRecord(Record(boothId: int.parse(id), title: title, isTimer: isTimer, isCurlingIron: isCurlingIron, backgroundColorDiversity: backgroundColorDiversity));
+          // coordinateController.selectedRecords.value.map((element) => print('hello${element.title}'));
+          markerController.turnOnIsWrited();
+          print(markerController.isWriteVisible.value);
+          boothController.getInfoByBoothId(int.parse(id));
       },
-      icon: markerIcon,
+      icon: BitmapDescriptor.fromBytes(markerIcon),
     );
 
-    setState(() {
-      _markers[id] = marker;
-    });
+
+    markerController.addMarker(id, marker);
+
 
 
 
   }
 }
 
-class Record {
-  final String title;
-  final String availability;
-
-  Record({required this.title, required this.availability});
-}
 
