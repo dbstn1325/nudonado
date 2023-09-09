@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/app/controller/booth/checkbox_controller.dart';
-import 'package:frontend/app/ui/booth/widget/booth_background_check_box.dart';
-import 'package:frontend/app/ui/booth/widget/booth_check_box.dart';
-import 'package:frontend/app/ui/booth/widget/booth_info.dart';
-import 'package:frontend/app/ui/booth/widget/booth_location.dart';
-import 'package:frontend/app/ui/booth/widget/booth_submit_button.dart';
-import 'package:frontend/app/ui/booth/widget/category_drop_down.dart';
+import 'package:frontend/app/ui/android/booth/widget/booth_background_check_box.dart';
+import 'package:frontend/app/ui/android/booth/widget/booth_check_box.dart';
+import 'package:frontend/app/ui/android/booth/widget/booth_info.dart';
+import 'package:frontend/app/ui/android/booth/widget/booth_location.dart';
+import 'package:frontend/app/ui/android/booth/widget/booth_submit_button.dart';
+import 'package:frontend/app/ui/android/booth/widget/category_drop_down.dart';
 import 'package:get/get.dart';
 
 Widget boothMainContent(BuildContext context) {

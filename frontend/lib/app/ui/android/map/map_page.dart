@@ -7,6 +7,7 @@ import 'package:frontend/app/controller/map/coordinate_controller.dart';
 import 'package:frontend/app/controller/map/marker_controller.dart';
 import 'package:frontend/app/controller/trace/trace_controller.dart';
 import 'package:frontend/app/data/provider/map/google_map_service.dart';
+import 'package:frontend/app/routes/nudonado_pages.dart';
 import 'package:frontend/app/ui/android/map/widget/Record.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -76,9 +77,11 @@ class _MapPageState extends State<MapPage> {
                   // This shifts it up a bit
                   child: InkWell(
                     onTap: () {
-                      print('hello${coordinateController.selectedRecord?.boothId.value}');
+                      if(coordinateController.selectedRecord != null) {
+                        print('hello${coordinateController.selectedRecord!.boothId.value}');
+                        Get.toNamed(Routes.TRACE, arguments: {'boothId': coordinateController.selectedRecord!.boothId.value});
+                      }
 
-                      // boothController.get
                     },
                     child: Container(
 

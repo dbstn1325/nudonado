@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/app/controller/booth/booth_controller.dart';
 import 'package:frontend/app/controller/map/coordinate_controller.dart';
-import 'package:frontend/app/ui/booth/booth_write_page.dart';
+import 'package:frontend/app/ui/android/booth/booth_write_page.dart';
+
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

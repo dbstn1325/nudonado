@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class WritePageAppBar extends StatelessWidget {
+  final String title;
 
-class BoothWriteAppBar extends StatelessWidget {
+  WritePageAppBar({required this.title});
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -13,7 +16,7 @@ class BoothWriteAppBar extends StatelessWidget {
         child: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            "부스 정보",
+            title,
             style: TextStyle(
               color: Colors.black,
               fontSize: 17,
