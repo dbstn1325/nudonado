@@ -7,7 +7,6 @@ import 'package:frontend/app/data/repository/map/CoordinateRepository.dart';
 import 'package:frontend/app/data/repository/member_repository.dart';
 import 'package:frontend/app/routes/nudonado_pages.dart';
 import 'package:frontend/app/ui/android/map/widget/Record.dart';
-import 'package:frontend/app/ui/android/widgets/auth/expired_token_dialog.dart';
 import 'package:get/get.dart';
 
 class CoordinateController extends GetxController {

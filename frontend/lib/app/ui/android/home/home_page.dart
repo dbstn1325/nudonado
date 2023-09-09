@@ -3,7 +3,7 @@ import 'package:frontend/app/controller/home/home_controller.dart';
 import 'package:frontend/app/ui/android/booth/booth_page.dart';
 import 'package:frontend/app/ui/android/booth/slide.dart';
 import 'package:frontend/app/ui/android/map/map_page.dart';
-import 'package:frontend/app/ui/android/widgets/home/loading_widget.dart';
+import 'package:frontend/app/ui/android/home/widget/loading_widget.dart';
 import 'package:frontend/app/ui/android/login/login_page.dart';
 import 'package:get/get.dart';
 

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/app/controller/map/coordinate_controller.dart';
 import 'package:frontend/app/controller/trace/trace_controller.dart';
+import 'package:frontend/app/data/model/trace/trace_create_request.dart';
+import 'package:frontend/app/data/model/trace/trace_info.dart';
 import 'package:frontend/app/data/model/trace/trace_model.dart';
 import 'package:frontend/app/data/provider/map/coordinate_api.dart';
 import 'package:frontend/app/data/repository/map/CoordinateRepository.dart';
@@ -17,6 +19,40 @@ class TraceApiClient {
   TraceApiClient({required this.httpClient});
 
   final coordinateController = Get.put(CoordinateController(repository: CoordinateRepository(coordinateClient: CoordinateClient())));
+
+  postTrace(TraceCreateRequest request) async {
+    final storage = FlutterSecureStorage();
+
+    var url = Uri.parse('$SERVER_URL${request.boothId}/traces');
+
+    print(request.memo);
+    print(request.boothId);
+
+    final accessToken = await storage.read(key: 'accessToken');
+    try {
+      final response = await httpClient.post(url,
+        headers: {
+          "content-type" : "application/json",
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(request.toJson()),
+      );
+
+      if (response.statusCode != 201) {
+        // print(jsonDecode(utf8.decode(response.bodyBytes)));
+        print(utf8.decode(response.bodyBytes));
+        throw Exception("액세스 토큰 발급에 대해 에러가 발생하였습니다.");
+      }
+
+      print(response.bodyBytes);
+      // BoothResponse boothResponse = BoothResponse.fromJson(jsonDecode(response.body));
+      // print("Received booth ID: ${boothResponse.id}");
+
+    }
+    catch(e) {
+      print(e);
+    }
+  }
 
 
   getAll() async {

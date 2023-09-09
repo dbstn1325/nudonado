@@ -21,8 +21,4 @@ class HomeController extends GetxController {
     }
   }
 
-  details(post){
-    this.post = post;
-    Get.toNamed(Routes.DETAILS);
-  }
 }

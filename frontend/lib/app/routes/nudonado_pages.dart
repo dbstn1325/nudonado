@@ -3,9 +3,11 @@ import 'package:frontend/app/bindings/coordinate_binding.dart';
 import 'package:frontend/app/bindings/home_binding.dart';
 import 'package:frontend/app/bindings/main_binding.dart';
 import 'package:frontend/app/bindings/map/map_binding.dart';
+import 'package:frontend/app/bindings/trace_controller.dart';
 import 'package:frontend/app/ui/android/home/home_page.dart';
-import 'package:frontend/app/ui/android/login/login_page.dart';
+import 'package:frontend/app/ui/android/auth/login_page.dart';
 import 'package:frontend/app/ui/android/map/map_page.dart';
+import 'package:frontend/app/ui/android/map/trace_write_page.dart';
 import 'package:get/get.dart';
 part './nudonado_routes.dart';
 
@@ -21,5 +23,6 @@ class AppPages {
         name: Routes.MAP,
         page: () => MapPage(),
         binding: MapBinding()),
+    GetPage(name: Routes.TRACE, page: () => TraceWritePage(), binding: TraceBinding())
   ];
 }
