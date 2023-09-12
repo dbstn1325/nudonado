@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:frontend/app/controller/map/marker_controller.dart';
 import 'package:frontend/app/controller/trace/trace_controller.dart';
 import 'package:frontend/app/data/provider/map/google_map_service.dart';
 import 'package:frontend/app/routes/nudonado_pages.dart';
+import 'package:frontend/app/ui/android/global/theme/color_styles.dart';
 import 'package:frontend/app/ui/android/map/widget/Record.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -62,6 +64,7 @@ class _MapPageState extends State<MapPage> {
               markers: markerController.markers.values.toSet(),
               onMapCreated: (controller) => _onMapCreated(controller),
               onTap: (latLng) {
+                  markerController.resetPreviousMarkerToOriginal();
                   coordinateController.clearSelectedRecord();
                   markerController.turnOffIsWrited();
               },
@@ -112,7 +115,7 @@ class _MapPageState extends State<MapPage> {
 
           Align(
             alignment: Alignment.bottomRight,
-            child: InkWell(  // Wrapping the Container with InkWell
+            child: InkWell(
               onTap: () async {
                 await coordinateController.getMyCoordinate();
                 Future.delayed(Duration(milliseconds: 500), () {
@@ -165,13 +168,13 @@ class _MapPageState extends State<MapPage> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(right: 10.0),
-                        child: Icon(
+                        child: const Icon(
                           CupertinoIcons.arrow_clockwise,
-                          color: Colors.black,
+                          color: ColorStyles.softBlack,
                           size: 17.0,
                         ),
                       ),
-                      Text("이 지역 재검색", style: TextStyle(color: Colors.black),),
+                      Text("이 지역 재검색", style: Theme.of(context).textTheme.labelSmall),
                     ],
                   ),
                   onPressed: () async {
@@ -210,6 +213,42 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  Future<Uint8List> circleImageIcon(String assetPath, double size) async {
+    final ByteData data = await rootBundle.load(assetPath);
+    final Uint8List bytes = data.buffer.asUint8List();
+    final Codec codec = await ui.instantiateImageCodec(bytes);
+    final FrameInfo frameInfo = await codec.getNextFrame();
+    final ui.Image img = frameInfo.image;
+
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, Rect.fromPoints(Offset(0, 0), Offset(size, size)));
+
+    final paint = Paint()..isAntiAlias = true;
+
+    final center = Offset(size / 2, size / 2);
+    final radius = size / 2;
+
+    final path = Path()..addOval(Rect.fromCircle(center: center, radius: radius));
+    canvas.clipPath(path);
+
+    canvas.drawImageRect(
+      img,
+      Rect.fromLTWH(0, 0, img.width.toDouble(), img.height.toDouble()),
+      Rect.fromLTWH(0, 0, size, size),
+      paint,
+    );
+
+    final picture = recorder.endRecording();
+    final circleImage = await picture.toImage(size.toInt(), size.toInt());
+    final circleData = await circleImage.toByteData(format: ui.ImageByteFormat.png);
+    return circleData!.buffer.asUint8List();
+  }
+
+
+
+
+
+
 
   void addMarker(String id,
       String title,
@@ -220,8 +259,9 @@ class _MapPageState extends State<MapPage> {
       String isCurlingIron,
       String backgroundColorDiversity
       ) async {
-    print(categoryImgSrc);
-    final Uint8List markerIcon = await getBytesFromAsset('assets/images/${categoryImgSrc}.png', 200);
+    final Uint8List markerIcon = await circleImageIcon('assets/images/${categoryImgSrc}.png', 120.0);
+    final largerMarkerIcon = await circleImageIcon('assets/images/${categoryImgSrc}.png', 170.0);
+
     final marker = Marker(
       markerId: MarkerId(id),
       position: location,
@@ -229,24 +269,17 @@ class _MapPageState extends State<MapPage> {
           title: title,
           snippet: categoryName
       ),
-      onTap: () async {   // Here we set the selectedRecord when a marker is tapped
+      onTap: () async {
+          markerController.handleMarkerTap(id, markerIcon, largerMarkerIcon);
           coordinateController.clearSelectedRecord();
           coordinateController.updateSelectedRecord(Record(boothId: int.parse(id), title: title, isTimer: isTimer, isCurlingIron: isCurlingIron, backgroundColorDiversity: backgroundColorDiversity));
-          // coordinateController.selectedRecords.value.map((element) => print('hello${element.title}'));
           markerController.turnOnIsWrited();
-          print(markerController.isWriteVisible.value);
           boothController.getInfoByBoothId(int.parse(id));
           traceController.getTraces();
       },
       icon: BitmapDescriptor.fromBytes(markerIcon),
     );
-
-
     markerController.addMarker(id, marker);
-
-
-
-
   }
 }
 
